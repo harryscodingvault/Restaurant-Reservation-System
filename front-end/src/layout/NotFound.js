@@ -7,11 +7,13 @@ import React from "react";
  *
  * @returns {JSX.Element}
  */
+import Wrapper from "./NotFound.style";
+
 function NotFound() {
   return (
-    <div className="NotFound">
+    <Wrapper className="NotFound">
       <h1>Not Found</h1>
-    </div>
+    </Wrapper>
   );
 }
 
