@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 /**
  * Defines the menu for this application.
@@ -12,28 +12,56 @@ function Menu() {
   const navigate = useNavigate();
 
   return (
-    <Wrapper className="navbar-container">
+    <Wrapper>
       <div className="title">
         <h2 onClick={() => navigate("/")}>
           <span>Periodic Tables</span>
         </h2>
       </div>
       <ul className="navbar-menu">
-        <li className="nav-item" onClick={() => navigate("/dashboard")}>
-          <span className="oi oi-dashboard" />
-          &nbsp;Dashboard
+        <li className="nav-item">
+          <NavLink
+            to="/dashboard"
+            style={({ isActive }) => {
+              return { color: isActive ? "red" : "white" };
+            }}
+          >
+            <span className="oi oi-dashboard" />
+            &nbsp;Dashboard
+          </NavLink>
         </li>
-        <li className="nav-item" onClick={() => navigate("/search")}>
-          <span className="oi oi-magnifying-glass" />
-          &nbsp;Search
+        <li className="nav-item">
+          <NavLink
+            to="/search"
+            style={({ isActive }) => {
+              return { color: isActive ? "red" : "white" };
+            }}
+          >
+            <span className="oi oi-magnifying-glass" />
+            &nbsp;Search
+          </NavLink>
         </li>
-        <li className="nav-item" onClick={() => navigate("/reservations/new")}>
-          <span className="oi oi-plus" />
-          &nbsp;New Reservation
+        <li className="nav-item">
+          <NavLink
+            to="/reservations/new"
+            style={({ isActive }) => {
+              return { color: isActive ? "red" : "white" };
+            }}
+          >
+            <span className="oi oi-plus" />
+            &nbsp;New Reservation
+          </NavLink>
         </li>
-        <li className="nav-item" onClick={() => navigate("/tables/new")}>
-          <span className="oi oi-layers" />
-          &nbsp;New Table
+        <li className="nav-item">
+          <NavLink
+            to="/tables/new"
+            style={({ isActive }) => {
+              return { color: isActive ? "red" : "white" };
+            }}
+          >
+            <span className="oi oi-layers" />
+            &nbsp;New Table
+          </NavLink>
         </li>
       </ul>
     </Wrapper>

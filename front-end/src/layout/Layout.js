@@ -1,6 +1,7 @@
 import React from "react";
 import Menu from "./Menu";
-import AppRoutes from "./AppRoutes";
+
+import { Outlet } from "react-router-dom";
 
 import "./Layout.css";
 
@@ -13,15 +14,10 @@ import "./Layout.css";
  */
 function Layout() {
   return (
-    <div className="container-fluid">
-      <div className="row h-100">
-        <div className="col-md-2 side-bar">
-          <Menu />
-        </div>
-        <div className="col">
-          <AppRoutes />
-        </div>
-      </div>
+    <div className="layout-container">
+      <Menu />
+      <Outlet />
+      <h3>Footer</h3>
     </div>
   );
 }
