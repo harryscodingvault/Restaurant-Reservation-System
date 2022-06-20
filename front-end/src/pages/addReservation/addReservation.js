@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Wrapper from "./addReservation.style.js";
 import FormRow from "../../layout/FormRow.js";
+import { useNavigate } from "react-router-dom";
 
 import { today } from "../../utils/date-time.js";
+import ErrorAlert from "../../layout/ErrorAlert.js";
 
 const initialValues = {
   first_name: "",
@@ -15,16 +17,56 @@ const initialValues = {
 
 const AddReservation = () => {
   const [values, setValues] = useState(initialValues);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const formatPhoneNumber = (value) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, "");
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 7) {
+      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+    }
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
+      3,
+      6
+    )}-${phoneNumber.slice(6, 10)}`;
+  };
 
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(name, value);
-    setValues({ ...values, [name]: value });
+    if (name === "mobile_number") {
+      const phoneNumber = formatPhoneNumber(value);
+      setValues({ ...values, mobile_number: phoneNumber });
+    } else {
+      console.log(name, value);
+      setValues({ ...values, [name]: value });
+    }
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
+    const {
+      first_name,
+      last_name,
+      mobile_number,
+      reservation_date,
+      reservation_time,
+      people,
+    } = values;
+
+    if (
+      !first_name ||
+      !last_name ||
+      !mobile_number ||
+      !reservation_date ||
+      !reservation_time ||
+      !people
+    ) {
+      setError("Fill all required fields!");
+    }
     console.log(values);
   };
 
@@ -32,6 +74,7 @@ const AddReservation = () => {
     <Wrapper>
       <form className="form" onSubmit={onSubmit}>
         <h3>Add Reservation</h3>
+        {error && <ErrorAlert error={{ message: error }} />}
         <FormRow
           type="text"
           name="first_name"
@@ -46,14 +89,15 @@ const AddReservation = () => {
           value={values.last_name}
           handleChange={handleChange}
         ></FormRow>
+
         <FormRow
           type="tel"
           name="mobile_number"
           placeholder="Mobile Number"
           value={values.mobile_number}
-          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
           handleChange={handleChange}
         ></FormRow>
+
         <FormRow
           type="date"
           name="reservation_date"
@@ -76,6 +120,13 @@ const AddReservation = () => {
           handleChange={handleChange}
           min="1"
         ></FormRow>
+        <button
+          className="btn btn-blok"
+          type="button"
+          onClick={() => navigate("/")}
+        >
+          <h5>Cancel</h5>
+        </button>
         <button className="btn btn-blok" type="submit">
           <h5>Submit</h5>
         </button>
