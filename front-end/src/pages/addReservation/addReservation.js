@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Wrapper from "./addReservation.style.js";
 import FormRow from "../../layout/FormRow.js";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import { today } from "../../utils/date-time.js";
 import ErrorAlert from "../../layout/ErrorAlert.js";
+import { addReservation } from "../../features/reservation/reservationSlice";
 
 const initialValues = {
   first_name: "",
@@ -19,6 +21,9 @@ const AddReservation = () => {
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { api_error, isLoading } = useSelector((store) => store.addReservation);
+  console.log("api_error", api_error);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;
@@ -41,7 +46,6 @@ const AddReservation = () => {
       const phoneNumber = formatPhoneNumber(value);
       setValues({ ...values, mobile_number: phoneNumber });
     } else {
-      console.log(name, value);
       setValues({ ...values, [name]: value });
     }
   };
@@ -66,8 +70,9 @@ const AddReservation = () => {
       !people
     ) {
       setError("Fill all required fields!");
+    } else {
+      dispatch(addReservation(values));
     }
-    console.log(values);
   };
 
   return (
@@ -127,9 +132,14 @@ const AddReservation = () => {
         >
           <h5>Cancel</h5>
         </button>
-        <button className="btn btn-blok" type="submit">
-          <h5>Submit</h5>
-        </button>
+
+        {isLoading ? (
+          <div className="spinner"></div>
+        ) : (
+          <button className="btn btn-blok" type="submit">
+            <h5>Submit</h5>
+          </button>
+        )}
       </form>
     </Wrapper>
   );
