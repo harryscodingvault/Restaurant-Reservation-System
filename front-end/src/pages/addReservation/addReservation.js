@@ -18,12 +18,11 @@ const initialValues = {
 };
 
 const AddReservation = () => {
+  const { api_error, isLoading } = useSelector((store) => store.reservation);
   const [values, setValues] = useState(initialValues);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(api_error);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { api_error, isLoading } = useSelector((store) => store.addReservation);
-  console.log("api_error", api_error);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;

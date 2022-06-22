@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import originURL from "../../utils/axios";
+import { addReservationThunk } from "./reservationThunk";
 
 const initialState = {
   reservation: null,
@@ -10,12 +10,7 @@ const initialState = {
 export const addReservation = createAsyncThunk(
   "reservation/addReservation",
   async (reservation, thunkAPI) => {
-    try {
-      const response = await originURL.post("/reservations", reservation);
-      console.log(response);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.msg);
-    }
+    return addReservationThunk("/reservations", reservation, thunkAPI);
   }
 );
 
@@ -33,7 +28,7 @@ const reservationSlice = createSlice({
     },
     [addReservation.rejected]: (state, { payload }) => {
       state.isLoading = false;
-      console.log(payload);
+      console.log("error", payload);
       state.api_error = payload;
     },
   },
