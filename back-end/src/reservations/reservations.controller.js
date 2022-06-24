@@ -5,7 +5,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 const reservationExists = async (req, res, next) => {
   const { reservation_id } = req.params;
-  const reservation = await service.getReservation(reservation_id);
+  const reservation = await service.getReservation({ reservation_id });
 
   if (reservation) {
     res.locals.reservation = reservation;
@@ -48,16 +48,16 @@ async function list(req, res) {
   if (mobile_number) {
     try {
       const data = await service.getReservation({ mobile_number });
-      res.json({
+      return res.json({
         data: data,
       });
     } catch (err) {
-      res.status(400).json({ message: "Not reservation found" });
+      res.status(400).json({ message: "No reservations found" });
     }
   }
-  console.log(mobile_number);
+
   const data = await service.list(date);
-  res.json({
+  return res.json({
     data: data,
   });
 }
@@ -106,6 +106,22 @@ async function updateStatus(req, res) {
   res.status(400).json({ message: "problems updating status" });
 }
 
+async function updateReservation(req, res) {
+  const data = req.body.data;
+  console.log(data);
+  const reservation = res.locals.reservation;
+  const { reservation_id } = reservation;
+  console.log(data);
+
+  if (reservation_id) {
+    const info = await service.updateReservation({ reservation_id, data });
+    return res.json({
+      data: info,
+    });
+  }
+  res.status(400).json({ message: "problems updating status" });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -129,5 +145,19 @@ module.exports = {
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(hasProperties("status")),
     asyncErrorBoundary(updateStatus),
+  ],
+  updateReservation: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(
+      hasProperties(
+        "first_name",
+        "last_name",
+        "mobile_number",
+        "reservation_date",
+        "reservation_time",
+        "people"
+      )
+    ),
+    asyncErrorBoundary(updateReservation),
   ],
 };

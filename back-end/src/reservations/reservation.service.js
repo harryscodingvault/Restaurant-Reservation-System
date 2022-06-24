@@ -13,9 +13,11 @@ const list = (date) => {
 const getReservation = ({ reservation_id, mobile_number }) => {
   if (mobile_number) {
     return knex("reservations")
-      .select("*")
-      .where({ mobile_number: mobile_number })
-      .first();
+      .whereRaw(
+        "translate(mobile_number, '() -', '') like ?",
+        `%${mobile_number.replace(/\D/g, "")}%`
+      )
+      .orderBy("reservation_date");
   }
   return knex("reservations")
     .select("*")
@@ -41,9 +43,35 @@ const updateStatus = ({ reservation_id, status }) => {
     );
 };
 
+const updateReservation = ({ reservation_id, data }) => {
+  const {
+    first_name,
+    last_name,
+    mobile_number,
+    reservation_date,
+    reservation_time,
+    people,
+  } = data;
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id: reservation_id })
+    .update(
+      {
+        first_name,
+        last_name,
+        mobile_number,
+        reservation_date,
+        reservation_time,
+        people,
+      },
+      "*"
+    );
+};
+
 module.exports = {
   list,
   create,
   getReservation,
   updateStatus,
+  updateReservation,
 };
