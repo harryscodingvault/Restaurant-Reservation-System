@@ -11,6 +11,9 @@ const checkDate = (date, time) => {
   let formatInput = inputTime.split(":");
   let hourCal = parseInt(formatInput[0]) - currentDate.getHours();
 
+  if (inputDate.getDay() !== 1) {
+    return true;
+  }
   if (currentDate.toDateString() === inputDate.toDateString() && hourCal >= 2) {
     return true;
   }
