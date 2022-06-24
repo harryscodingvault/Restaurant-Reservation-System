@@ -4,6 +4,10 @@ const list = () => {
   return knex("tables").select("*").orderBy("capacity", "desc");
 };
 
+const getTable = (table_id) => {
+  return knex("tables").select("*").where({ table_id: table_id }).first();
+};
+
 const create = (data) => {
   return knex("tables")
     .insert(data, "*")
@@ -13,4 +17,5 @@ const create = (data) => {
 module.exports = {
   list,
   create,
+  getTable,
 };
