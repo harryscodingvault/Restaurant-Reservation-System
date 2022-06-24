@@ -72,14 +72,7 @@ async function getReservation(req, res) {
 
 async function create(req, res) {
   const data = req.body.data;
-  const {
-    first_name,
-    last_name,
-    mobile_number,
-    reservation_date,
-    reservation_time,
-    people,
-  } = data;
+  const { reservation_date, reservation_time } = data;
 
   if (checkDate(reservation_date, reservation_time) === true) {
     const reservation = await service.create(data);
@@ -88,7 +81,7 @@ async function create(req, res) {
     });
   }
   res
-    .status(404)
+    .status(400)
     .json({ message: checkDate(reservation_date, reservation_time) });
 }
 
