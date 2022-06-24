@@ -24,10 +24,27 @@ async function create(req, res) {
   res.status(400).json({ message: "capacity has to be al least 1" });
 }
 
+async function update(req, res) {
+  const data = req.body.data;
+  const { names, capacity } = data;
+
+  if (capacity >= 1) {
+    const reservation = await service.create(data);
+    return res.json({
+      data: reservation,
+    });
+  }
+  res.status(400).json({ message: "capacity has to be al least 1" });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
     asyncErrorBoundary(hasProperties("name", "capacity")),
     asyncErrorBoundary(create),
+  ],
+  update: [
+    asyncErrorBoundary(hasProperties("reservation_id")),
+    asyncErrorBoundary(update),
   ],
 };
