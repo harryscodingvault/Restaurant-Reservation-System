@@ -44,28 +44,10 @@ const updateStatus = ({ reservation_id, status }) => {
 };
 
 const updateReservation = ({ reservation_id, data }) => {
-  const {
-    first_name,
-    last_name,
-    mobile_number,
-    reservation_date,
-    reservation_time,
-    people,
-  } = data;
   return knex("reservations")
     .select("*")
     .where({ reservation_id: reservation_id })
-    .update(
-      {
-        first_name,
-        last_name,
-        mobile_number,
-        reservation_date,
-        reservation_time,
-        people,
-      },
-      "*"
-    );
+    .update(data, "*");
 };
 
 module.exports = {
