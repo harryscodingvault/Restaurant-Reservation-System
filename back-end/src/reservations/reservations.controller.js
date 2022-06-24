@@ -4,14 +4,19 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 // UTILS
 const checkDate = (date, time) => {
   const inputDate = new Date(date);
-  const inputTime = new Date(time);
+  const inputTime = time;
 
   const currentDate = new Date();
 
-  const currentTime = currentDate.getTime();
+  let formatInput = inputTime.split(":");
+  let hourCal = parseInt(formatInput[0]) - currentDate.getHours();
 
-  console.log(inputDate, inputTime, inputDate >= currentDate);
-
+  if (currentDate.toDateString() === inputDate.toDateString() && hourCal >= 2) {
+    return true;
+  }
+  if (currentDate.toDateString() < inputDate.toDateString()) {
+    return true;
+  }
   return false;
 };
 
