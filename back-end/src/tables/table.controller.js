@@ -58,12 +58,26 @@ async function update(req, res) {
   const { reservation_id, people } = reservation;
 
   if (capacity >= people) {
-    const reservation = await service.update({ table_id, reservation_id });
+    const data = await service.update({ table_id, reservation_id });
     return res.json({
-      data: reservation,
+      data: data,
     });
   }
   res.status(400).json({ message: "reservations is over capacity" });
+}
+
+async function deleteTable(req, res) {
+  const table = res.locals.table;
+
+  const { table_id } = table;
+
+  if (table_id) {
+    const data = await service.update({ table_id, reservation_id: null });
+    return res.json({
+      data: data,
+    });
+  }
+  res.status(400).json({ message: "Can not unseat table" });
 }
 
 module.exports = {
@@ -77,5 +91,9 @@ module.exports = {
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(hasProperties("reservation_id")),
     asyncErrorBoundary(update),
+  ],
+  deleteTable: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(deleteTable),
   ],
 };
