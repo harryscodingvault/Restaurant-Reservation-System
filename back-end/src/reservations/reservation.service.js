@@ -10,7 +10,13 @@ const list = (date) => {
   return knex("reservations").select("*").orderBy("reservation_date", "asc");
 };
 
-const getReservation = (reservation_id) => {
+const getReservation = ({ reservation_id, mobile_number }) => {
+  if (mobile_number) {
+    return knex("reservations")
+      .select("*")
+      .where({ mobile_number: mobile_number })
+      .first();
+  }
   return knex("reservations")
     .select("*")
     .where({ reservation_id: reservation_id })

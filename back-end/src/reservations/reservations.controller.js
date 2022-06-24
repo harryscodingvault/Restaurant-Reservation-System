@@ -44,8 +44,18 @@ const checkDate = (date, time) => {
 const service = require("./reservation.service");
 
 async function list(req, res) {
-  const { date } = req.query;
-
+  const { date, mobile_number } = req.query;
+  if (mobile_number) {
+    try {
+      const data = await service.getReservation({ mobile_number });
+      res.json({
+        data: data,
+      });
+    } catch (err) {
+      res.status(400).json({ message: "Not reservation found" });
+    }
+  }
+  console.log(mobile_number);
   const data = await service.list(date);
   res.json({
     data: data,
