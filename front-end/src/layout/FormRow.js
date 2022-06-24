@@ -8,6 +8,7 @@ const FormRow = ({
   value,
   handleChange,
   min,
+  max,
   pattern,
 }) => {
   return (
@@ -20,6 +21,7 @@ const FormRow = ({
         value={value}
         onChange={handleChange}
         min={min}
+        max={max}
         pattern={pattern}
       ></input>
     </div>

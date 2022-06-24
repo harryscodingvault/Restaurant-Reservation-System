@@ -8,12 +8,22 @@ import { today } from "../../utils/date-time.js";
 import ErrorAlert from "../../layout/ErrorAlert.js";
 import { addReservation } from "../../features/reservation/reservationSlice";
 
+const formatTime = (num) => {
+  if (num < 10) {
+    return `0${num}`;
+  }
+  return num;
+};
+const currentTime = `${formatTime(new Date().getHours())}:${formatTime(
+  new Date().getMinutes()
+)}`;
+
 const initialValues = {
   first_name: "",
   last_name: "",
   mobile_number: "",
   reservation_date: today(),
-  reservation_time: "",
+  reservation_time: currentTime,
   people: 1,
 };
 
@@ -115,6 +125,8 @@ const AddReservation = () => {
           placeholder="Reservation Time"
           value={values.reservation_time}
           handleChange={handleChange}
+          min="22:30"
+          max="21:30"
         ></FormRow>
         <FormRow
           type="number"

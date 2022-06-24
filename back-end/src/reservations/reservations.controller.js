@@ -72,6 +72,7 @@ async function getReservation(req, res) {
 
 async function create(req, res) {
   const data = req.body.data;
+  console.log("this data", data);
   const { reservation_date, reservation_time } = data;
 
   if (checkDate(reservation_date, reservation_time) === true) {
