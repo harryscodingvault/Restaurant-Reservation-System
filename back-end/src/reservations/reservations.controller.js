@@ -52,6 +52,14 @@ async function list(req, res) {
   });
 }
 
+async function getReservation(req, res) {
+  const reservation = res.locals.reservation;
+
+  res.json({
+    data: reservation,
+  });
+}
+
 async function create(req, res) {
   const data = req.body.data;
   const {
@@ -79,13 +87,13 @@ async function updateStatus(req, res) {
   const reservation = res.locals.reservation;
   const { reservation_id } = reservation;
 
-  if (capacity >= people) {
+  if (reservation_id) {
     const data = await service.updateStatus({ reservation_id, status });
     return res.json({
       data: data,
     });
   }
-  res.status(400).json({ message: "reservations is over capacity" });
+  res.status(400).json({ message: "problems updating status" });
 }
 
 module.exports = {
@@ -102,6 +110,10 @@ module.exports = {
       )
     ),
     asyncErrorBoundary(create),
+  ],
+  getReservation: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(getReservation),
   ],
   updateStatus: [
     asyncErrorBoundary(reservationExists),
