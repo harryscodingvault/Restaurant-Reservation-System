@@ -13,11 +13,15 @@ async function list(req, res) {
 
 async function create(req, res) {
   const data = req.body.data;
+  const { names, capacity } = data;
 
-  const reservation = await service.create(data);
-  return res.json({
-    data: reservation,
-  });
+  if (capacity >= 1) {
+    const reservation = await service.create(data);
+    return res.json({
+      data: reservation,
+    });
+  }
+  res.status(400).json({ message: "capacity has to be al least 1" });
 }
 
 module.exports = {

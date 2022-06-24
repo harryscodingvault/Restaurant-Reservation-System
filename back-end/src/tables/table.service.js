@@ -1,7 +1,7 @@
 const knex = require("../db/connection.js");
 
 const list = () => {
-  return knex("tables").select("*").orderBy("capacity", "asc");
+  return knex("tables").select("*").orderBy("capacity", "desc");
 };
 
 const create = (data) => {
