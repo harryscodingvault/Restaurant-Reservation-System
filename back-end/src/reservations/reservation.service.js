@@ -23,8 +23,21 @@ const create = (data) => {
     .then((createdRecords) => createdRecords[0]);
 };
 
+const updateStatus = ({ reservation_id, status }) => {
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id: reservation_id })
+    .update(
+      {
+        status: status,
+      },
+      "*"
+    );
+};
+
 module.exports = {
   list,
   create,
   getReservation,
+  updateStatus,
 };

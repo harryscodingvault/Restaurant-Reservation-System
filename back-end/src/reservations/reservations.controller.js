@@ -2,6 +2,19 @@ const hasProperties = require("../errors/hasProperties");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 // UTILS
+
+const reservationExists = async (req, res, next) => {
+  const { reservation_id } = req.params;
+  const reservation = await service.getReservation(reservation_id);
+
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+
+  next({ status: 400, message: `Reservation cannot be found.` });
+};
+
 const checkDate = (date, time) => {
   const inputDate = new Date(`${date} ${time}`);
 
@@ -61,6 +74,20 @@ async function create(req, res) {
     .json({ message: checkDate(reservation_date, reservation_time) });
 }
 
+async function updateStatus(req, res) {
+  const { status } = req.body.data;
+  const reservation = res.locals.reservation;
+  const { reservation_id } = reservation;
+
+  if (capacity >= people) {
+    const data = await service.updateStatus({ reservation_id, status });
+    return res.json({
+      data: data,
+    });
+  }
+  res.status(400).json({ message: "reservations is over capacity" });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -75,5 +102,10 @@ module.exports = {
       )
     ),
     asyncErrorBoundary(create),
+  ],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(hasProperties("status")),
+    asyncErrorBoundary(updateStatus),
   ],
 };
