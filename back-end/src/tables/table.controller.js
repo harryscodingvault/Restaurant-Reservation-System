@@ -54,16 +54,16 @@ async function create(req, res) {
 async function update(req, res) {
   const table = res.locals.table;
   const reservation = res.locals.reservation;
+  const { capacity, table_id } = table;
+  const { reservation_id, people } = reservation;
 
-  console.log(table, reservation);
-
-  if (capacity >= 1) {
-    const reservation = await service.create(data);
+  if (capacity >= people) {
+    const reservation = await service.update({ table_id, reservation_id });
     return res.json({
       data: reservation,
     });
   }
-  res.status(400).json({ message: "capacity has to be al least 1" });
+  res.status(400).json({ message: "reservations is over capacity" });
 }
 
 module.exports = {
