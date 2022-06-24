@@ -3,24 +3,28 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 // UTILS
 const checkDate = (date, time) => {
-  const inputDate = new Date(date);
-  const inputTime = time;
+  const inputDate = new Date(`${date} ${time}`);
 
   const currentDate = new Date();
 
-  let formatInput = inputTime.split(":");
-  let hourCal = parseInt(formatInput[0]) - currentDate.getHours();
+  let formatTime = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
 
-  if (inputDate.getDay() !== 1) {
-    return true;
+  if (time < "10:30:00" || time > "21:30:00") {
+    return "It has to be during open hours";
   }
-  if (currentDate.toDateString() === inputDate.toDateString() && hourCal >= 2) {
-    return true;
+  if (inputDate.getDay() === 1) {
+    return "Closed on Tuesday";
   }
-  if (currentDate.toDateString() < inputDate.toDateString()) {
-    return true;
+  if (
+    inputDate.toDateString() === currentDate.toDateString() &&
+    formatTime > time
+  ) {
+    return "It has to be haver current time";
   }
-  return false;
+  if (currentDate > inputDate) {
+    return "It has to be a future date";
+  }
+  return true;
 };
 
 // CONTROLLERS
@@ -52,7 +56,9 @@ async function create(req, res) {
       data: reservation,
     });
   }
-  res.status(404).json({ message: `It has to be a future date` });
+  res
+    .status(404)
+    .json({ message: checkDate(reservation_date, reservation_time) });
 }
 
 module.exports = {
