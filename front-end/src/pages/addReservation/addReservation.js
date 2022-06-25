@@ -8,22 +8,12 @@ import { today } from "../../utils/date-time.js";
 import ErrorAlert from "../../layout/ErrorAlert.js";
 import { addReservation } from "../../features/reservation/reservationSlice";
 
-const formatTime = (num) => {
-  if (num < 10) {
-    return `0${num}`;
-  }
-  return num;
-};
-const currentTime = `${formatTime(new Date().getHours())}:${formatTime(
-  new Date().getMinutes()
-)}`;
-
 const initialValues = {
   first_name: "",
   last_name: "",
   mobile_number: "",
   reservation_date: today(),
-  reservation_time: currentTime,
+  reservation_time: "10:30",
   people: 1,
 };
 
@@ -136,13 +126,6 @@ const AddReservation = () => {
           handleChange={handleChange}
           min="1"
         ></FormRow>
-        <button
-          className="btn btn-blok"
-          type="button"
-          onClick={() => navigate("/")}
-        >
-          <h5>Cancel</h5>
-        </button>
 
         {isLoading ? (
           <div className="spinner"></div>
@@ -151,6 +134,13 @@ const AddReservation = () => {
             <h5>Submit</h5>
           </button>
         )}
+        <button
+          className="btn btn-blok"
+          type="button"
+          onClick={() => navigate("/")}
+        >
+          <h5>Cancel</h5>
+        </button>
       </form>
     </Wrapper>
   );

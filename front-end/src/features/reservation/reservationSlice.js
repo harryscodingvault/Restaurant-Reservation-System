@@ -1,8 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addReservationThunk } from "./reservationThunk";
+import {
+  addReservationThunk,
+  getAllReservationThunk,
+} from "./reservationThunk";
 
 const initialState = {
-  reservation: null,
+  current_reservation: null,
+  reservation_list: null,
   isLoading: false,
   api_error: null,
 };
@@ -14,19 +18,44 @@ export const addReservation = createAsyncThunk(
   }
 );
 
+export const getAllReservations = createAsyncThunk(
+  "reservation/getAllReservations",
+  async (date, thunkAPI) => {
+    if (date) {
+      return getAllReservationThunk(`/reservations?date=${date}`, thunkAPI);
+    }
+    return getAllReservationThunk("/reservations", thunkAPI);
+  }
+);
+
 const reservationSlice = createSlice({
   name: "reservation",
   initialState,
   extraReducers: {
+    // ADD RESERVATION
     [addReservation.pending]: (state) => {
       state.isLoading = true;
     },
     [addReservation.fulfilled]: (state, { payload }) => {
-      const { reservation } = payload;
+      const { data } = payload;
       state.isLoading = false;
-      state.reservation = reservation;
+      state.current_reservation = data;
     },
     [addReservation.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      console.log("error", payload);
+      state.api_error = payload;
+    },
+    // GET ALL RESERVATIONS
+    [getAllReservations.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getAllReservations.fulfilled]: (state, { payload }) => {
+      const { data } = payload;
+      state.isLoading = false;
+      state.reservation_list = data ? data : [];
+    },
+    [getAllReservations.rejected]: (state, { payload }) => {
       state.isLoading = false;
       console.log("error", payload);
       state.api_error = payload;

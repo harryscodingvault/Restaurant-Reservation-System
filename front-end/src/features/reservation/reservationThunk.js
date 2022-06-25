@@ -5,6 +5,16 @@ export const addReservationThunk = async (url, reservation, thunkAPI) => {
     console.log("reservation", reservation);
     const response = await originURL.post(url, reservation);
     console.log("response", response);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.msg);
+  }
+};
+
+export const getAllReservationThunk = async (url, thunkAPI) => {
+  try {
+    const response = await originURL.get(url);
+    return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.msg);
   }
