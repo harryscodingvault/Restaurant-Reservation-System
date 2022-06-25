@@ -2,26 +2,31 @@ import styled from "styled-components";
 
 const Wrapper = styled.section`
   width: 100%;
-  background-color: var(--grey-700);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  h2 {
-    font-size: 6vw;
-    cursor: pointer;
-  }
-  ul {
+  justify-content: center;
+  flex-direction: column;
+  border: 2px solid var(--primary-500);
+  margin-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  .row {
+    width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
 
-    li {
-      width: 100%;
-      padding: 0.5rem;
-      margin: 0.1rem;
-      cursor: pointer;
-      :hover {
-        background-color: var(--primary-500);
-      }
+  .text-group {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+
+    p {
+      padding-left: 0.5rem;
+    }
+    .label {
+      color: var(--primary-500);
     }
   }
 `;

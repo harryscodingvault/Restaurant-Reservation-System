@@ -13,7 +13,53 @@ const ReservationCard = ({ reservation }) => {
     status,
   } = reservation;
 
-  return <Wrapper>{first_name}</Wrapper>;
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString();
+  };
+
+  const formatTime = (time) => {
+    let str = time.split(":");
+    let hour = str[0] % 12 || 12;
+    let min = str[1];
+    let timeOfDay = hour >= 12 ? "PM" : "AM";
+    return `${hour}:${min} ${timeOfDay}`;
+  };
+
+  return (
+    <Wrapper>
+      <div className="row">
+        <div className="text-group">
+          <p className="label">Name: </p>
+          <p>{first_name}</p> <p>{last_name}</p>
+        </div>
+        <div className="text-group">
+          <p className="label">Phone: </p>
+          <p>{mobile_number}</p>
+        </div>
+      </div>
+      <div className="row">
+        <div className="text-group">
+          <p className="label">Date: </p>
+          <p>{formatDate(reservation_date)}</p>
+        </div>
+        <div className="text-group">
+          <p className="label">Time: </p>
+          <p>{formatTime(reservation_time)}</p>
+        </div>
+      </div>
+      <div className="row">
+        <div className="text-group">
+          <p className="label">Number of people: </p>
+          <p>{people}</p>
+        </div>
+
+        <div className="text-group">
+          <p className="label">Status: </p>
+          <p>{status}</p>
+        </div>
+      </div>
+    </Wrapper>
+  );
 };
 
 export default ReservationCard;
