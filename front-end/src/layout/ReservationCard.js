@@ -21,7 +21,7 @@ const ReservationCard = ({ reservation }) => {
     let str = time.split(":");
     let hour = str[0] % 12 || 12;
     let min = str[1];
-    let timeOfDay = hour >= 12 ? "PM" : "AM";
+    let timeOfDay = hour >= 12 ? "AM" : "PM";
     return `${hour}:${min} ${timeOfDay}`;
   };
 

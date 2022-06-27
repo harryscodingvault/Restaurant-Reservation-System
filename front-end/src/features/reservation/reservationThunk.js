@@ -3,7 +3,7 @@ import originURL from "../../utils/axios";
 export const addReservationThunk = async (url, reservation, thunkAPI) => {
   try {
     console.log("reservation", reservation);
-    const response = await originURL.post(url, reservation);
+    const response = await originURL.post(url, { data: reservation });
     console.log("response", response);
     return response.data;
   } catch (error) {

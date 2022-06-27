@@ -43,7 +43,7 @@ const reservationSlice = createSlice({
     },
     [addReservation.rejected]: (state, { payload }) => {
       state.isLoading = false;
-      console.log("error", payload);
+
       state.api_error = payload;
     },
     // GET ALL RESERVATIONS

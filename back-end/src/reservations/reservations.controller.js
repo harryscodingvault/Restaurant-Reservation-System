@@ -25,7 +25,8 @@ const checkDate = (date, time) => {
   if (time < "10:30:00" || time > "21:30:00") {
     return "It has to be during open hours";
   }
-  if (inputDate.getDay() === 1) {
+
+  if (inputDate.getDay() === 2) {
     return "Closed on Tuesday";
   }
   if (
@@ -71,7 +72,6 @@ async function getReservation(req, res) {
 }
 
 async function create(req, res) {
-  console.log("this data", req.body);
   const data = req.body.data;
 
   const { reservation_date, reservation_time } = data;
