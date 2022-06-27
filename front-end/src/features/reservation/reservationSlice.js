@@ -9,6 +9,7 @@ const initialState = {
   reservation_list: null,
   isLoading: false,
   api_error: null,
+  dashboard_date: null,
 };
 
 export const addReservation = createAsyncThunk(
@@ -20,9 +21,12 @@ export const addReservation = createAsyncThunk(
 
 export const getAllReservations = createAsyncThunk(
   "reservation/getAllReservations",
-  async (date, thunkAPI) => {
-    if (date) {
-      return getAllReservationThunk(`/reservations?date=${date}`, thunkAPI);
+  async (dashboard_date, thunkAPI) => {
+    if (dashboard_date) {
+      return getAllReservationThunk(
+        `/reservations?date=${dashboard_date}`,
+        thunkAPI
+      );
     }
     return getAllReservationThunk("/reservations", thunkAPI);
   }

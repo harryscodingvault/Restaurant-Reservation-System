@@ -8,30 +8,27 @@ import { getAllReservations } from "../../features/reservation/reservationSlice"
 
 function Dashboard() {
   const { reservation_list } = useSelector((store) => store.reservation);
-  const [reservations, setReservations] = useState(
-    reservation_list ? reservation_list : []
-  );
   const [reservationsError, setReservationsError] = useState(null);
   const dispatch = useDispatch();
 
-  console.log("reservations", reservations);
-
   useEffect(() => {
+    const loadDashboard = () => {
+      const abortController = new AbortController();
+      dispatch(getAllReservations());
+      setReservationsError(null);
+
+      return () => abortController.abort();
+    };
+
     loadDashboard();
   }, []);
-
-  function loadDashboard() {
-    const abortController = new AbortController();
-    dispatch(getAllReservations());
-    setReservationsError(null);
-
-    return () => abortController.abort();
-  }
 
   return (
     <main>
       <h1>Dashboard</h1>
-      <ReservationList reservations={reservations} />
+      <ReservationList
+        reservations={reservation_list ? reservation_list : []}
+      />
       <ErrorAlert error={reservationsError} />
     </main>
   );
