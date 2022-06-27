@@ -82,6 +82,7 @@ const AddReservation = () => {
       setError("Fill all required fields!");
     } else {
       dispatch(addReservation(values));
+      navigate("/dashboard");
     }
   };
 
