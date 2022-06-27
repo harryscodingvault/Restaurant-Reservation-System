@@ -25,15 +25,29 @@ const initialValues = {
 };
 
 const AddReservation = () => {
-  const { api_error, isLoading } = useSelector((store) => store.reservation);
+  const { api_error, isLoading, current_reservation } = useSelector(
+    (store) => store.reservation
+  );
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState(api_error);
+  const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     setError(api_error);
   }, [api_error]);
+
+  useEffect(() => {
+    if (submit) {
+      setTimeout(() => {
+        if (api_error !== null && error !== null) {
+          navigate("/dashboard");
+        }
+      }, 2000);
+    }
+    setSubmit(false);
+  }, [api_error, submit, navigate]);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;
@@ -82,7 +96,7 @@ const AddReservation = () => {
       setError("Fill all required fields!");
     } else {
       dispatch(addReservation(values));
-      navigate("/dashboard");
+      setSubmit(true);
     }
   };
 

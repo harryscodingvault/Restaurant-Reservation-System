@@ -9,6 +9,8 @@ import { getAllReservations } from "../../features/reservation/reservationSlice"
 function Dashboard() {
   const { reservation_list } = useSelector((store) => store.reservation);
   const [reservationsError, setReservationsError] = useState(null);
+  const [searchByDate, setSearchByDate] = useState(null);
+  const [searchByPhone, setSearchByPhone] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {

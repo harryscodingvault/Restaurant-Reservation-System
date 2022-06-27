@@ -6,11 +6,13 @@ import {
 
 const initialState = {
   current_reservation: null,
+  search_date: null,
   reservation_list: null,
   isLoading: false,
   api_error: null,
-  dashboard_date: null,
 };
+
+console.log();
 
 export const addReservation = createAsyncThunk(
   "reservation/addReservation",
@@ -21,10 +23,10 @@ export const addReservation = createAsyncThunk(
 
 export const getAllReservations = createAsyncThunk(
   "reservation/getAllReservations",
-  async (dashboard_date, thunkAPI) => {
-    if (dashboard_date) {
+  async (search_date, thunkAPI) => {
+    if (search_date) {
       return getAllReservationThunk(
-        `/reservations?date=${dashboard_date}`,
+        `/reservations?date=${search_date}`,
         thunkAPI
       );
     }
@@ -43,7 +45,7 @@ const reservationSlice = createSlice({
     [addReservation.fulfilled]: (state, { payload }) => {
       const { data } = payload;
       state.isLoading = false;
-
+      state.api_error = null;
       state.current_reservation = data;
     },
     [addReservation.rejected]: (state, { payload }) => {
