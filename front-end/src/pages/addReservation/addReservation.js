@@ -8,12 +8,19 @@ import { today } from "../../utils/date-time.js";
 import ErrorAlert from "../../layout/ErrorAlert.js";
 import { addReservation } from "../../features/reservation/reservationSlice";
 
+const newDate = new Date();
+let currentTime = newDate
+  .toLocaleTimeString("en-US", { hour12: false })
+  .split("");
+currentTime.splice(5, 3);
+currentTime = currentTime.join("");
+
 const initialValues = {
   first_name: "",
   last_name: "",
   mobile_number: "",
   reservation_date: today(),
-  reservation_time: "10:30",
+  reservation_time: currentTime,
   people: 1,
 };
 
