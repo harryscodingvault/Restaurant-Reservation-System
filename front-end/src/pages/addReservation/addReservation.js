@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Wrapper from "./addReservation.style.js";
 import FormRow from "../../layout/FormRow.js";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,10 @@ const AddReservation = () => {
   const [error, setError] = useState(api_error);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setError(api_error);
+  }, [api_error]);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;

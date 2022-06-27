@@ -39,12 +39,13 @@ const reservationSlice = createSlice({
     [addReservation.fulfilled]: (state, { payload }) => {
       const { data } = payload;
       state.isLoading = false;
+
       state.current_reservation = data;
     },
     [addReservation.rejected]: (state, { payload }) => {
       state.isLoading = false;
 
-      state.api_error = payload;
+      state.api_error = payload.message;
     },
     // GET ALL RESERVATIONS
     [getAllReservations.pending]: (state) => {
@@ -57,7 +58,7 @@ const reservationSlice = createSlice({
     },
     [getAllReservations.rejected]: (state, { payload }) => {
       state.isLoading = false;
-      console.log("error", payload);
+
       state.api_error = payload;
     },
   },
