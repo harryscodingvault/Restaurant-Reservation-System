@@ -19,16 +19,16 @@ function Dashboard() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const loadDashboard = () => {
-      const abortController = new AbortController();
-      dispatch(getAllReservations(searchByDate));
-      setReservationsError(null);
-
-      return () => abortController.abort();
-    };
-
-    loadDashboard();
+    loadDashboard(searchByDate);
   }, []);
+
+  const loadDashboard = (date) => {
+    const abortController = new AbortController();
+    dispatch(getAllReservations(date));
+    setReservationsError(null);
+
+    return () => abortController.abort();
+  };
 
   return (
     <main>
