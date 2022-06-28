@@ -43,6 +43,9 @@ function Dashboard() {
 
   return (
     <Wrapper>
+      <div className="dashboard-current-date">
+        <h2>{search_date || today()}</h2>
+      </div>
       <div className="dashboard-button-group">
         <div className="btn" onClick={() => dispatch(setSearchDate(today()))}>
           Today
