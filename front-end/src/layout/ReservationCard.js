@@ -1,9 +1,11 @@
 import React from "react";
-
 import Wrapper from "./ReservationCard.style";
+
+import { Link } from "react-router-dom";
 
 const ReservationCard = ({ reservation }) => {
   const {
+    reservation_id,
     first_name,
     last_name,
     mobile_number,
@@ -57,6 +59,13 @@ const ReservationCard = ({ reservation }) => {
           <p className="label">Status: </p>
           <p>{status}</p>
         </div>
+      </div>
+      <div className="reservation-btn-group">
+        <Link to={`/reservations/${reservation_id}/seat`}>
+          <div className="btn">
+            <h5>Seat</h5>
+          </div>
+        </Link>
       </div>
     </Wrapper>
   );
