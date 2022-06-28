@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./layout/Layout";
 import Dashboard from "./pages/dashboard/Dashboard";
 import NotFound from "./layout/NotFound";
-import AddReservation from "./pages/addReservation/addReservation";
+import AddReservation from "./pages/addReservation/AddReservation";
 
 /**
  * Defines the root application component.

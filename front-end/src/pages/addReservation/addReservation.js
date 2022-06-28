@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Wrapper from "./addReservation.style.js";
+import Wrapper from "./AddReservation.style";
 import FormRow from "../../layout/FormRow.js";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,15 +26,14 @@ const initialValues = {
 };
 
 const AddReservation = () => {
-  const { api_error, isLoading, search_date, current_reservation } =
-    useSelector((store) => store.reservation);
+  const { api_error, isLoading, current_reservation } = useSelector(
+    (store) => store.reservation
+  );
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState(api_error);
   const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  //console.log(search_date);
 
   useEffect(() => {
     setError(api_error);
@@ -42,10 +41,14 @@ const AddReservation = () => {
 
   useEffect(() => {
     if (current_reservation && submit) {
+      setSearchDate();
       navigate("/dashboard");
       setSubmit(false);
+      const { reservation_date } = values;
+      let date = reservation_date.split("/").join("-");
+      dispatch(setSearchDate(date));
     }
-  }, [submit, current_reservation, navigate]);
+  }, [submit, current_reservation, navigate, dispatch, values]);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;
