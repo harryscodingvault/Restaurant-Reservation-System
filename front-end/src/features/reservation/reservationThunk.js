@@ -17,3 +17,12 @@ export const getAllReservationThunk = async (url, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.response.data);
   }
 };
+
+export const addTableThunk = async (url, table, thunkAPI) => {
+  try {
+    const response = await originURL.post(url, { data: table });
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data);
+  }
+};

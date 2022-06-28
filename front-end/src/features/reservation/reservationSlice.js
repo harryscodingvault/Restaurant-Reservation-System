@@ -2,18 +2,18 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addReservationThunk,
   getAllReservationThunk,
+  addTableThunk,
 } from "./reservationThunk";
 
 const initialState = {
   current_reservation: null,
+  current_table: null,
   search_date: null,
   search_phone: null,
   reservation_list: null,
   isLoading: false,
   api_error: null,
 };
-
-console.log();
 
 export const addReservation = createAsyncThunk(
   "reservation/addReservation",
@@ -32,6 +32,13 @@ export const getAllReservations = createAsyncThunk(
       );
     }
     return getAllReservationThunk("/reservations", thunkAPI);
+  }
+);
+
+export const addTable = createAsyncThunk(
+  "reservation/addTable",
+  async (table, thunkAPI) => {
+    return addTableThunk("/tables", table, thunkAPI);
   }
 );
 
@@ -72,6 +79,21 @@ const reservationSlice = createSlice({
       state.isLoading = false;
 
       state.api_error = payload;
+    },
+    // ADD TABLE
+    [addTable.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [addTable.fulfilled]: (state, { payload }) => {
+      const { data } = payload;
+      state.isLoading = false;
+      state.api_error = null;
+      state.current_table = data;
+    },
+    [addTable.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+
+      state.api_error = payload.message;
     },
   },
 });

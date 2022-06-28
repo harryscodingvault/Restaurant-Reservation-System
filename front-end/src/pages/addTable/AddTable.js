@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import ErrorAlert from "../../layout/ErrorAlert.js";
-import { addReservation } from "../../features/reservation/reservationSlice";
+import { addTable } from "../../features/reservation/reservationSlice";
 
 const initialValues = {
-  table_name: "",
+  name: "",
   capacity: 1,
 };
 
@@ -27,11 +27,11 @@ const AddTable = () => {
   }, [api_error]);
 
   useEffect(() => {
-    if (submit) {
+    if (submit && current_table) {
       navigate("/dashboard");
       setSubmit(false);
     }
-  }, [submit, navigate, dispatch, values]);
+  }, [submit, navigate, dispatch, values, current_table]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -41,12 +41,13 @@ const AddTable = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { capacity, table_name } = values;
+    const { capacity, name } = values;
 
-    if (!capacity || !table_name) {
+    if (!capacity || !name) {
       setError("Fill all required fields!");
     } else {
-      dispatch(addReservation(values));
+      console.log(values);
+      dispatch(addTable(values));
       setSubmit(true);
     }
   };
@@ -58,9 +59,9 @@ const AddTable = () => {
         {error && <ErrorAlert error={{ message: error }} />}
         <FormRow
           type="text"
-          name="table_name"
+          name="name"
           placeholder="Table Name"
-          value={values.table_name}
+          value={values.name}
           handleChange={handleChange}
         ></FormRow>
 
