@@ -9,7 +9,11 @@ const Wrapper = styled.section`
     justify-content: center;
     margin-top: 1rem;
   }
-
+  .dashboard-switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .dashboard-button-group {
     display: flex;
     flex-direction: row;

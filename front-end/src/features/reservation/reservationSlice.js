@@ -3,6 +3,7 @@ import {
   addReservationThunk,
   getAllReservationThunk,
   addTableThunk,
+  getTablesThunk,
 } from "./reservationThunk";
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   search_date: null,
   search_phone: null,
   reservation_list: null,
+  table_list: null,
   isLoading: false,
   api_error: null,
 };
@@ -32,6 +34,13 @@ export const getAllReservations = createAsyncThunk(
       );
     }
     return getAllReservationThunk("/reservations", thunkAPI);
+  }
+);
+
+export const getTables = createAsyncThunk(
+  "reservation/getTables",
+  async (_, thunkAPI) => {
+    return getTablesThunk("/tables", thunkAPI);
   }
 );
 
@@ -94,6 +103,19 @@ const reservationSlice = createSlice({
       state.isLoading = false;
 
       state.api_error = payload.message;
+    },
+    // GET TABLES
+    [getTables.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getTables.fulfilled]: (state, { payload }) => {
+      const { data } = payload;
+      state.isLoading = false;
+      state.table_list = data ? data : [];
+    },
+    [getTables.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      state.api_error = payload;
     },
   },
 });

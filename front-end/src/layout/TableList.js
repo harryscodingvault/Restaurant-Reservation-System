@@ -2,7 +2,7 @@ import React from "react";
 import Wrapper from "./TableList.style";
 
 const TableList = () => {
-  return <Wrapper>TableList</Wrapper>;
+  return <div>TableList</div>;
 };
 
 export default TableList;

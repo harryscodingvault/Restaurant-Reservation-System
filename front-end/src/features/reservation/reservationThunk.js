@@ -26,3 +26,12 @@ export const addTableThunk = async (url, table, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.response.data);
   }
 };
+
+export const getTablesThunk = async (url, thunkAPI) => {
+  try {
+    const response = await originURL.get(url);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data);
+  }
+};
