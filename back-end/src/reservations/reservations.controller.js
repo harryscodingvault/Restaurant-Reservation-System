@@ -33,7 +33,7 @@ const checkDate = (date, time) => {
     inputDate.toDateString() === currentDate.toDateString() &&
     formatTime > time
   ) {
-    return "It has to be haver current time";
+    return "It has to be current time";
   }
   if (currentDate > inputDate) {
     return "It has to be a future date";

@@ -12,11 +12,17 @@ const initialState = {
 };
 
 function Dashboard() {
-  const { reservation_list } = useSelector((store) => store.reservation);
+  const { reservation_list, search_date } = useSelector(
+    (store) => store.reservation
+  );
   const [reservationsError, setReservationsError] = useState(null);
-  const [searchByDate, setSearchByDate] = useState(initialState.currentDate);
+  const [searchByDate, setSearchByDate] = useState(
+    search_date ? search_date : initialState.currentDate
+  );
   const [searchByPhone, setSearchByPhone] = useState(null);
   const dispatch = useDispatch();
+
+  console.log("search_date", search_date);
 
   useEffect(() => {
     loadDashboard(searchByDate);

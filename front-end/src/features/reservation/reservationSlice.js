@@ -7,6 +7,7 @@ import {
 const initialState = {
   current_reservation: null,
   search_date: null,
+  search_phone: null,
   reservation_list: null,
   isLoading: false,
   api_error: null,
@@ -37,6 +38,11 @@ export const getAllReservations = createAsyncThunk(
 const reservationSlice = createSlice({
   name: "reservation",
   initialState,
+  reducers: {
+    setSearchDate: (state, { payload }) => {
+      state.search_date = payload;
+    },
+  },
   extraReducers: {
     // ADD RESERVATION
     [addReservation.pending]: (state) => {
@@ -70,4 +76,5 @@ const reservationSlice = createSlice({
   },
 });
 
+export const { setSearchDate } = reservationSlice.actions;
 export default reservationSlice.reducer;

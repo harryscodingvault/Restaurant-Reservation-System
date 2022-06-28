@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { today } from "../../utils/date-time.js";
 import ErrorAlert from "../../layout/ErrorAlert.js";
 import { addReservation } from "../../features/reservation/reservationSlice";
+import { setSearchDate } from "../../features/reservation/reservationSlice";
 
 const newDate = new Date();
 let currentTime = newDate
@@ -25,29 +26,26 @@ const initialValues = {
 };
 
 const AddReservation = () => {
-  const { api_error, isLoading, current_reservation } = useSelector(
-    (store) => store.reservation
-  );
+  const { api_error, isLoading, search_date, current_reservation } =
+    useSelector((store) => store.reservation);
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState(api_error);
   const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  //console.log(search_date);
+
   useEffect(() => {
     setError(api_error);
   }, [api_error]);
 
   useEffect(() => {
-    if (submit) {
-      setTimeout(() => {
-        if (api_error !== null && error !== null) {
-          navigate("/dashboard");
-        }
-      }, 2000);
+    if (current_reservation && submit) {
+      navigate("/dashboard");
+      setSubmit(false);
     }
-    setSubmit(false);
-  }, [api_error, submit, navigate]);
+  }, [submit, current_reservation, navigate]);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;
