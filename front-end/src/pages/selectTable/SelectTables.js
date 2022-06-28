@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Wrapper from "./AddTable.style";
+import Wrapper from "./SelectTables.style";
 
-import FormRow from "../../layout/FormRow.js";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -9,17 +8,17 @@ import ErrorAlert from "../../layout/ErrorAlert.js";
 import { addTable } from "../../features/reservation/reservationSlice";
 
 const initialValues = {
-  name: "",
-  capacity: 1,
+  table: "",
 };
 
-const AddTable = () => {
-  const { api_error, isLoading, current_table } = useSelector(
+const SelectTables = () => {
+  const { api_error, isLoading, table_list } = useSelector(
     (store) => store.reservation
   );
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState(api_error);
   const [submit, setSubmit] = useState(false);
+  const [tables, setTables] = useState(table_list || []);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -28,11 +27,11 @@ const AddTable = () => {
   }, [api_error]);
 
   useEffect(() => {
-    if (submit && current_table) {
+    if (tables === [] || table_list === null) {
       navigate("/dashboard");
-      setSubmit(false);
     }
-  }, [submit, navigate, dispatch, values, current_table]);
+    //setSubmit(false);
+  }, [tables, navigate, table_list]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -56,24 +55,26 @@ const AddTable = () => {
   return (
     <Wrapper>
       <form className="form" onSubmit={onSubmit}>
-        <h3>Add Table</h3>
+        <h3>Select Table</h3>
         {error && <ErrorAlert error={{ message: error }} />}
-        <FormRow
-          type="text"
-          name="name"
-          placeholder="Table Name"
-          value={values.name}
-          handleChange={handleChange}
-        ></FormRow>
-
-        <FormRow
-          type="number"
-          name="capacity"
-          placeholder="Capacity"
-          value={values.capacity}
-          handleChange={handleChange}
-          min="1"
-        ></FormRow>
+        <div className="form-row form-row-select">
+          <select
+            name="table"
+            id="table"
+            values={values.table}
+            onChange={handleChange}
+            className="form-select"
+          >
+            {tables.map((table, index) => {
+              const { name, capacity } = table;
+              return (
+                <option key={index} value={capacity}>
+                  {name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
 
         {isLoading ? (
           <div className="spinner"></div>
@@ -94,4 +95,4 @@ const AddTable = () => {
   );
 };
 
-export default AddTable;
+export default SelectTables;

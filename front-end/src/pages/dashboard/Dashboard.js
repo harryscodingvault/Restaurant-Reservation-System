@@ -3,6 +3,7 @@ import Wrapper from "./Dashboard.style";
 
 import ErrorAlert from "../../layout/ErrorAlert";
 import ReservationList from "../../layout/ReservationList";
+import TableList from "../../layout/TableList";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -75,6 +76,16 @@ function Dashboard() {
           <ReservationList
             reservations={reservation_list ? reservation_list : []}
           />
+          <ErrorAlert error={reservationsError} />
+        </>
+      )}
+      {showTables && (
+        <>
+          <div className="dashboard-current-date">
+            <h2>{search_date || today()}</h2>
+          </div>
+
+          <TableList tables={table_list ? table_list : []} />
           <ErrorAlert error={reservationsError} />
         </>
       )}

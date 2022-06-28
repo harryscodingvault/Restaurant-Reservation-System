@@ -1,8 +1,17 @@
 import React from "react";
 import Wrapper from "./TableList.style";
 
-const TableList = () => {
-  return <div>TableList</div>;
+import TableCard from "./TableCard";
+
+const TableList = ({ tables }) => {
+  let sortedArray = [...tables];
+  sortedArray = sortedArray.sort((a, b) => (a.name > b.name ? 1 : -1));
+
+  const renderCards = sortedArray.map((table) => {
+    return <TableCard table={table} key={table.table_id} />;
+  });
+
+  return <Wrapper>{renderCards}</Wrapper>;
 };
 
 export default TableList;

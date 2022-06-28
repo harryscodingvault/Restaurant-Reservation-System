@@ -7,6 +7,7 @@ const reservationsService = require("../reservations/reservation.service");
 
 const tableExists = async (req, res, next) => {
   const { table_id } = req.params;
+  console.log(table_id, "hey");
   const table = await service.getTable(table_id);
 
   if (table) {
@@ -19,7 +20,10 @@ const tableExists = async (req, res, next) => {
 
 const reservationExists = async (req, res, next) => {
   const { reservation_id } = req.body.data;
-  const reservation = await reservationsService.getReservation(reservation_id);
+
+  const reservation = await reservationsService.getReservation({
+    reservation_id,
+  });
 
   if (reservation) {
     res.locals.reservation = reservation;
@@ -53,6 +57,7 @@ async function create(req, res) {
 
 async function update(req, res) {
   const table = res.locals.table;
+
   const reservation = res.locals.reservation;
   const { capacity, table_id } = table;
   const { reservation_id, people } = reservation;
