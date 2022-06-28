@@ -4,6 +4,7 @@ import Layout from "./layout/Layout";
 import Dashboard from "./pages/dashboard/Dashboard";
 import NotFound from "./layout/NotFound";
 import AddReservation from "./pages/addReservation/AddReservation";
+import AddTable from "./pages/addTable/AddTable";
 
 /**
  * Defines the root application component.
@@ -17,6 +18,9 @@ function App() {
         <Route path="dashboard" element={<Dashboard />} exact />
         <Route path="reservations" exact>
           <Route path="new" element={<AddReservation />} />
+        </Route>
+        <Route path="tables" exact>
+          <Route path="new" element={<AddTable />} />
         </Route>
         <Route path="*" element={<NotFound />} exact />
       </Route>
