@@ -8,6 +8,7 @@ import ErrorAlert from "../../layout/ErrorAlert.js";
 import {
   seatTable,
   changeReservationStatus,
+  getAllReservations,
 } from "../../features/reservation/reservationSlice";
 
 const initialValues = {
@@ -22,6 +23,7 @@ const SelectTables = () => {
     reservation_list,
     current_table,
     current_reservation,
+    search_date,
   } = useSelector((store) => store.reservation);
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState(api_error);
@@ -45,6 +47,7 @@ const SelectTables = () => {
       table_list === null ||
       (current_table && !error && submit && current_reservation)
     ) {
+      dispatch(getAllReservations(search_date));
       navigate("/dashboard");
     }
   }, [
@@ -56,6 +59,8 @@ const SelectTables = () => {
     error,
     submit,
     current_reservation,
+    dispatch,
+    search_date,
   ]);
 
   useEffect(() => {

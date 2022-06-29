@@ -19,6 +19,7 @@ function Dashboard() {
   );
   const [reservationsError, setReservationsError] = useState(null);
   const [showTables, setShowTables] = useState(false);
+  const [reservations, setReservations] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,6 +29,10 @@ function Dashboard() {
       dispatch(getTables());
       setReservationsError(null);
 
+      const filteredReservations = reservation_list?.filter(
+        (reservation) => reservation.status !== "finished"
+      );
+      setReservations(filteredReservations);
       return () => abortController.abort();
     };
 
@@ -71,9 +76,7 @@ function Dashboard() {
             </div>
           </div>
 
-          <ReservationList
-            reservations={reservation_list ? reservation_list : []}
-          />
+          <ReservationList reservations={reservations ? reservations : []} />
           <ErrorAlert error={reservationsError} />
         </>
       )}

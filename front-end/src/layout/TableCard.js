@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./TableCard.style";
 
 import { useDispatch, useSelector } from "react-redux";
-import { freeTable, getTables } from "../features/reservation/reservationSlice";
+import {
+  freeTable,
+  getTables,
+  getAllReservations,
+  changeReservationStatus,
+} from "../features/reservation/reservationSlice";
 import ErrorAlert from "./ErrorAlert";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +24,7 @@ const TableCard = ({ table }) => {
   useEffect(() => {
     if (current_table && !error && submit) {
       dispatch(getTables());
+      dispatch(getAllReservations());
       navigate("/dashboard");
     }
   }, [current_table, error, submit, navigate, dispatch]);
@@ -28,12 +34,18 @@ const TableCard = ({ table }) => {
   }, [api_error]);
 
   const finishHandler = () => {
+    const reservationStatus = {
+      reservationId: table.reservation_id,
+      status: "finished",
+    };
+
     if (
       window.confirm(
         "Is this table ready to seat new guests?\n\nThis cannot be undone."
       )
     ) {
       dispatch(freeTable(table.table_id));
+      dispatch(changeReservationStatus(reservationStatus));
       setSubmit(true);
     }
   };
