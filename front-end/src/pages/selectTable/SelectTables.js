@@ -5,16 +5,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import ErrorAlert from "../../layout/ErrorAlert.js";
-import { addTable } from "../../features/reservation/reservationSlice";
+import { seatTable } from "../../features/reservation/reservationSlice";
 
 const initialValues = {
   table: null,
 };
 
 const SelectTables = () => {
-  const { api_error, isLoading, table_list, reservation_list } = useSelector(
-    (store) => store.reservation
-  );
+  const { api_error, isLoading, table_list, reservation_list, current_table } =
+    useSelector((store) => store.reservation);
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState(api_error);
   const [submit, setSubmit] = useState(false);
@@ -28,14 +27,26 @@ const SelectTables = () => {
 
   useEffect(() => {
     setError(api_error);
-    if (noTables) setError("No tables Available");
+    if (noTables === false) setError("No tables Available");
   }, [api_error, noTables]);
 
   useEffect(() => {
-    if (tables === [] || table_list === null) {
+    if (
+      tables === [] ||
+      table_list === null ||
+      (current_table && !error && submit)
+    ) {
       navigate("/dashboard");
     }
-  }, [tables, navigate, table_list, currentReservation]);
+  }, [
+    tables,
+    navigate,
+    table_list,
+    currentReservation,
+    current_table,
+    error,
+    submit,
+  ]);
 
   useEffect(() => {
     const reservation = reservation_list?.find((reservation) => {
@@ -62,12 +73,12 @@ const SelectTables = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     const { table } = values;
+    const data = { table: table, reservation: reservationId };
 
     if (!table) {
       setError("Select a table!");
     } else {
-      console.log(values);
-      // dispatch(addTable({table:Number(table)}));
+      dispatch(seatTable(data));
       setSubmit(true);
     }
   };

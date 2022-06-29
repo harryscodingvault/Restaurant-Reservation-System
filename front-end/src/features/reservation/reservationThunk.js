@@ -29,7 +29,7 @@ export const addTableThunk = async (url, table, thunkAPI) => {
 
 export const seatTableThunk = async (url, reservation, thunkAPI) => {
   try {
-    const response = await originURL.post(url, { data: reservation });
+    const response = await originURL.put(url, { data: reservation });
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data);

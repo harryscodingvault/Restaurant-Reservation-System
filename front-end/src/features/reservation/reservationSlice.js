@@ -54,8 +54,14 @@ export const addTable = createAsyncThunk(
 
 export const seatTable = createAsyncThunk(
   "reservation/seatTable",
-  async (tableId, reservation, thunkAPI) => {
-    return seatTableThunk(`/tables${tableId}/seat`, reservation, thunkAPI);
+  async (data, thunkAPI) => {
+    const { table, reservation } = data;
+
+    return seatTableThunk(
+      `/tables/${table}/seat`,
+      { reservation_id: reservation },
+      thunkAPI
+    );
   }
 );
 
