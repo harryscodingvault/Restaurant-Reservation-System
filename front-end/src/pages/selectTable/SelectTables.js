@@ -90,7 +90,7 @@ const SelectTables = () => {
       <form className="form" onSubmit={onSubmit}>
         <h3>Select Table</h3>
         {error && <ErrorAlert error={{ message: error }} />}
-        {noTables && (
+        {noTables === false && (
           <>
             <div className="form-row form-row-select">
               <select

@@ -36,6 +36,15 @@ export const seatTableThunk = async (url, reservation, thunkAPI) => {
   }
 };
 
+export const freeTableThunk = async (url, thunkAPI) => {
+  try {
+    const response = await originURL.delete(url);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data);
+  }
+};
+
 export const getTablesThunk = async (url, thunkAPI) => {
   try {
     const response = await originURL.get(url);
