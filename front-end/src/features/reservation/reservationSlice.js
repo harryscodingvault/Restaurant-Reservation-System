@@ -4,6 +4,7 @@ import {
   getAllReservationThunk,
   addTableThunk,
   getTablesThunk,
+  seatTableThunk,
 } from "./reservationThunk";
 
 const initialState = {
@@ -48,6 +49,13 @@ export const addTable = createAsyncThunk(
   "reservation/addTable",
   async (table, thunkAPI) => {
     return addTableThunk("/tables", table, thunkAPI);
+  }
+);
+
+export const seatTable = createAsyncThunk(
+  "reservation/seatTable",
+  async (tableId, reservation, thunkAPI) => {
+    return seatTableThunk(`/tables${tableId}/seat`, reservation, thunkAPI);
   }
 );
 
@@ -102,6 +110,20 @@ const reservationSlice = createSlice({
     [addTable.rejected]: (state, { payload }) => {
       state.isLoading = false;
 
+      state.api_error = payload.message;
+    },
+    // SEAT TABLE
+    [seatTable.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [seatTable.fulfilled]: (state, { payload }) => {
+      const { data } = payload;
+      state.isLoading = false;
+      state.api_error = null;
+      state.current_table = data;
+    },
+    [seatTable.rejected]: (state, { payload }) => {
+      state.isLoading = false;
       state.api_error = payload.message;
     },
     // GET TABLES
