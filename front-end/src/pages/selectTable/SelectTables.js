@@ -53,13 +53,15 @@ const SelectTables = () => {
       return reservation.reservation_id === Number(reservationId);
     });
     const filteredTables = table_list?.filter(
-      (table) => table.capacity >= currentReservation?.people
+      (table) =>
+        table.capacity >= currentReservation?.people &&
+        table.reservation_id === null
     );
     setTables(filteredTables);
     setCurrentReservation(reservation);
     if (filteredTables) {
       filteredTables[0]
-        ? setValues({ table: filteredTables[1].table_id })
+        ? setValues({ table: filteredTables[0]?.table_id })
         : setNoTables(true);
     }
   }, [reservationId, reservation_list, table_list, currentReservation]);
