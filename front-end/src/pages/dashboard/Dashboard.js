@@ -21,8 +21,6 @@ function Dashboard() {
   const [showTables, setShowTables] = useState(true);
   const dispatch = useDispatch();
 
-  console.log("dashboard tables", table_list);
-
   useEffect(() => {
     const loadDashboard = (date) => {
       const abortController = new AbortController();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Wrapper from "./SelectTables.style";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import ErrorAlert from "../../layout/ErrorAlert.js";
@@ -12,15 +12,18 @@ const initialValues = {
 };
 
 const SelectTables = () => {
-  const { api_error, isLoading, table_list } = useSelector(
+  const { api_error, isLoading, table_list, reservation_list } = useSelector(
     (store) => store.reservation
   );
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState(api_error);
   const [submit, setSubmit] = useState(false);
-  const [tables, setTables] = useState(table_list || []);
+  const [currentReservation, setCurrentReservation] = useState(null);
+  const [tables, setTables] = useState([]);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { reservationId } = useParams();
 
   useEffect(() => {
     setError(api_error);
@@ -30,8 +33,18 @@ const SelectTables = () => {
     if (tables === [] || table_list === null) {
       navigate("/dashboard");
     }
-    //setSubmit(false);
-  }, [tables, navigate, table_list]);
+  }, [tables, navigate, table_list, currentReservation]);
+
+  useEffect(() => {
+    const reservation = reservation_list?.find((reservation) => {
+      return reservation.reservation_id === Number(reservationId);
+    });
+    const filteredTables = table_list?.filter(
+      (table) => table.capacity >= currentReservation?.people
+    );
+    setTables(filteredTables);
+    setCurrentReservation(reservation);
+  }, [reservationId, reservation_list, table_list, currentReservation]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -69,7 +82,7 @@ const SelectTables = () => {
               const { name, capacity } = table;
               return (
                 <option key={index} value={capacity}>
-                  {name}
+                  {name} - {capacity}
                 </option>
               );
             })}
