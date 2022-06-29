@@ -47,7 +47,6 @@ const AddTable = () => {
     if (!capacity || !name) {
       setError("Fill all required fields!");
     } else {
-      console.log(values);
       dispatch(addTable(values));
       setSubmit(true);
     }

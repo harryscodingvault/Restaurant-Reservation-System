@@ -8,7 +8,7 @@ import ErrorAlert from "../../layout/ErrorAlert.js";
 import { addTable } from "../../features/reservation/reservationSlice";
 
 const initialValues = {
-  table: "",
+  table: null,
 };
 
 const SelectTables = () => {
@@ -20,6 +20,7 @@ const SelectTables = () => {
   const [submit, setSubmit] = useState(false);
   const [currentReservation, setCurrentReservation] = useState(null);
   const [tables, setTables] = useState([]);
+  const [noTables, setNoTables] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,7 +28,8 @@ const SelectTables = () => {
 
   useEffect(() => {
     setError(api_error);
-  }, [api_error]);
+    if (noTables) setError("No tables Available");
+  }, [api_error, noTables]);
 
   useEffect(() => {
     if (tables === [] || table_list === null) {
@@ -44,6 +46,11 @@ const SelectTables = () => {
     );
     setTables(filteredTables);
     setCurrentReservation(reservation);
+    if (filteredTables) {
+      filteredTables[0]
+        ? setValues({ table: filteredTables[1].table_id })
+        : setNoTables(true);
+    }
   }, [reservationId, reservation_list, table_list, currentReservation]);
 
   const handleChange = (e) => {
@@ -54,13 +61,13 @@ const SelectTables = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { capacity, name } = values;
+    const { table } = values;
 
-    if (!capacity || !name) {
-      setError("Fill all required fields!");
+    if (!table) {
+      setError("Select a table!");
     } else {
       console.log(values);
-      dispatch(addTable(values));
+      // dispatch(addTable({table:Number(table)}));
       setSubmit(true);
     }
   };
@@ -70,31 +77,35 @@ const SelectTables = () => {
       <form className="form" onSubmit={onSubmit}>
         <h3>Select Table</h3>
         {error && <ErrorAlert error={{ message: error }} />}
-        <div className="form-row form-row-select">
-          <select
-            name="table"
-            id="table"
-            values={values.table}
-            onChange={handleChange}
-            className="form-select"
-          >
-            {tables.map((table, index) => {
-              const { name, capacity } = table;
-              return (
-                <option key={index} value={capacity}>
-                  {name} - {capacity}
-                </option>
-              );
-            })}
-          </select>
-        </div>
+        {noTables && (
+          <>
+            <div className="form-row form-row-select">
+              <select
+                name="table"
+                id="table"
+                values={values.table}
+                onChange={handleChange}
+                className="form-select"
+              >
+                {tables.map((table, index) => {
+                  const { name, capacity } = table;
+                  return (
+                    <option key={index} value={capacity}>
+                      {name} - {capacity}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
 
-        {isLoading ? (
-          <div className="spinner"></div>
-        ) : (
-          <button className="btn btn-blok" type="submit">
-            <h5>Submit</h5>
-          </button>
+            {isLoading ? (
+              <div className="spinner"></div>
+            ) : (
+              <button className="btn btn-blok" type="submit">
+                <h5>Submit</h5>
+              </button>
+            )}
+          </>
         )}
         <button
           className="btn btn-blok"
