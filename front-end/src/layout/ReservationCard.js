@@ -56,16 +56,22 @@ const ReservationCard = ({ reservation }) => {
         </div>
 
         <div className="text-group">
-          <p className="label">Status: </p>
+          <p
+            className={`label data-reservation-id-status=${reservation.reservation_id}`}
+          >
+            Status:{" "}
+          </p>
           <p>{status}</p>
         </div>
       </div>
       <div className="reservation-btn-group">
-        <Link to={`/reservations/${reservation_id}/seat`}>
-          <div className="btn">
-            <h5>Seat</h5>
-          </div>
-        </Link>
+        {status === "booked" && (
+          <Link to={`/reservations/${reservation_id}/seat`}>
+            <div className="btn">
+              <h5>Seat</h5>
+            </div>
+          </Link>
+        )}
       </div>
     </Wrapper>
   );

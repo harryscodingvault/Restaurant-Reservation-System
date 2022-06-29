@@ -27,7 +27,7 @@ const SelectTables = () => {
 
   useEffect(() => {
     setError(api_error);
-    if (noTables === false) setError("No tables Available");
+    if (noTables === true) setError("No tables Available");
   }, [api_error, noTables]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const SelectTables = () => {
     );
     setTables(filteredTables);
     setCurrentReservation(reservation);
-    if (filteredTables) {
+    if (filteredTables?.length) {
       filteredTables[0]
         ? setValues({ table: filteredTables[0]?.table_id })
         : setNoTables(true);
@@ -90,7 +90,7 @@ const SelectTables = () => {
       <form className="form" onSubmit={onSubmit}>
         <h3>Select Table</h3>
         {error && <ErrorAlert error={{ message: error }} />}
-        {noTables === false && (
+        {!noTables && (
           <>
             <div className="form-row form-row-select">
               <select

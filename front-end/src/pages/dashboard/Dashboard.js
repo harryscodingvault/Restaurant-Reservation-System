@@ -18,7 +18,7 @@ function Dashboard() {
     (store) => store.reservation
   );
   const [reservationsError, setReservationsError] = useState(null);
-  const [showTables, setShowTables] = useState(true);
+  const [showTables, setShowTables] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
