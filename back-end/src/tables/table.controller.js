@@ -78,14 +78,16 @@ async function deleteTable(req, res) {
   const table = res.locals.table;
 
   const { table_id } = table;
-
+  if (table.reservation_id === null) {
+    return res.status(400).json({ message: "table is already free" });
+  }
   if (table_id) {
     const data = await service.update({ table_id, reservation_id: null });
     return res.json({
       data: data,
     });
   }
-  res.status(400).json({ message: "Can not unseat table" });
+  return res.status(400).json({ message: "Can not free this table" });
 }
 
 module.exports = {
