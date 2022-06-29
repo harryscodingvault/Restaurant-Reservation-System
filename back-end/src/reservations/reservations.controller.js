@@ -91,6 +91,7 @@ async function updateStatus(req, res) {
   const { status } = req.body.data;
   const reservation = res.locals.reservation;
   const { reservation_id } = reservation;
+  console.log(status);
 
   if (reservation_id) {
     const data = await service.updateStatus({ reservation_id, status });
@@ -103,10 +104,9 @@ async function updateStatus(req, res) {
 
 async function updateReservation(req, res) {
   const data = req.body.data;
-  console.log(data);
+
   const reservation = res.locals.reservation;
   const { reservation_id } = reservation;
-  console.log(data);
 
   if (reservation_id) {
     const info = await service.updateReservation({ reservation_id, data });

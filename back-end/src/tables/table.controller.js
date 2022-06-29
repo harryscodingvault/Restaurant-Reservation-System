@@ -7,7 +7,7 @@ const reservationsService = require("../reservations/reservation.service");
 
 const tableExists = async (req, res, next) => {
   const { table_id } = req.params;
-  console.log(table_id, "hey");
+
   const table = await service.getTable(table_id);
 
   if (table) {

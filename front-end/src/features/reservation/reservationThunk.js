@@ -9,18 +9,18 @@ export const addReservationThunk = async (url, reservation, thunkAPI) => {
   }
 };
 
-export const getAllReservationThunk = async (url, status, thunkAPI) => {
+export const getAllReservationThunk = async (url, thunkAPI) => {
   try {
-    const response = await originURL.get(url, { data: status });
+    const response = await originURL.get(url);
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data);
   }
 };
 
-export const changeReservationStatusThunk = async (url, thunkAPI) => {
+export const changeReservationStatusThunk = async (url, status, thunkAPI) => {
   try {
-    const response = await originURL.get(url);
+    const response = await originURL.put(url, { data: status });
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data);

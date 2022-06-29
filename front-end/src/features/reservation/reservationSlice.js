@@ -29,11 +29,11 @@ export const addReservation = createAsyncThunk(
 
 export const changeReservationStatus = createAsyncThunk(
   "reservation/changeReservationStatus",
-  async (data, thunkAPI) => {
-    const { reservationId, status } = data;
+  async (reservationStatus, thunkAPI) => {
+    const { reservationId, status } = reservationStatus;
     return changeReservationStatusThunk(
-      `/tables/${reservationId}/seat`,
-      status,
+      `/reservations/${reservationId}/status`,
+      { status: status },
       thunkAPI
     );
   }
