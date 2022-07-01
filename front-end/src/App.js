@@ -6,6 +6,7 @@ import NotFound from "./layout/NotFound";
 import AddReservation from "./pages/addReservation/AddReservation";
 import AddTable from "./pages/addTable/AddTable";
 import SelectTables from "./pages/selectTable/SelectTables";
+import SearchReservation from "./pages/searchReservation/SearchReservation";
 
 /**
  * Defines the root application component.
@@ -17,6 +18,7 @@ function App() {
     <Routes>
       <Route path="/" exact element={<Layout />}>
         <Route path="dashboard" element={<Dashboard />} exact />
+        <Route path="search" element={<SearchReservation />} exact />
         <Route path="reservations" exact>
           <Route path="new" element={<AddReservation />} />
           <Route path=":reservationId/seat" element={<SelectTables />} />
@@ -24,6 +26,7 @@ function App() {
         <Route path="tables" exact>
           <Route path="new" element={<AddTable />} />
         </Route>
+
         <Route path="*" element={<NotFound />} exact />
       </Route>
     </Routes>

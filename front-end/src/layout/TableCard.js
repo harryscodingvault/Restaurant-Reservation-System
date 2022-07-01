@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 const TableCard = ({ table }) => {
   const { name, capacity, reservation_id } = table;
-  const { current_table, api_error } = useSelector(
+  const { current_table, api_error, search_date } = useSelector(
     (store) => store.reservation
   );
   const [error, setError] = useState(api_error);
@@ -24,10 +24,10 @@ const TableCard = ({ table }) => {
   useEffect(() => {
     if (current_table && !error && submit) {
       dispatch(getTables());
-      dispatch(getAllReservations());
+      dispatch(getAllReservations({ search_date }));
       navigate("/dashboard");
     }
-  }, [current_table, error, submit, navigate, dispatch]);
+  }, [current_table, error, submit, navigate, dispatch, search_date]);
 
   useEffect(() => {
     setError(api_error);

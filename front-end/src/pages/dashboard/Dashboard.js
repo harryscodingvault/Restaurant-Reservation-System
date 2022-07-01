@@ -25,7 +25,7 @@ function Dashboard() {
   useEffect(() => {
     const loadDashboard = (date) => {
       const abortController = new AbortController();
-      dispatch(getAllReservations(date));
+      dispatch(getAllReservations({ search_date: date }));
       dispatch(getTables());
       setReservationsError(null);
 

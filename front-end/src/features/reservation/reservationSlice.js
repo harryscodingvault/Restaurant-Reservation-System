@@ -41,10 +41,18 @@ export const changeReservationStatus = createAsyncThunk(
 
 export const getAllReservations = createAsyncThunk(
   "reservation/getAllReservations",
-  async (search_date, thunkAPI) => {
+  async (search_term, thunkAPI) => {
+    const { search_date, search_phone } = search_term;
+
     if (search_date) {
       return getAllReservationThunk(
         `/reservations?date=${search_date}`,
+        thunkAPI
+      );
+    }
+    if (search_phone) {
+      return getAllReservationThunk(
+        `/reservations?mobile_number=${search_phone}`,
         thunkAPI
       );
     }

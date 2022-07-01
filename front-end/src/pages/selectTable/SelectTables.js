@@ -47,7 +47,7 @@ const SelectTables = () => {
       table_list === null ||
       (current_table && !error && submit && current_reservation)
     ) {
-      dispatch(getAllReservations(search_date));
+      dispatch(getAllReservations({ search_date: search_date }));
       navigate("/dashboard");
     }
   }, [
