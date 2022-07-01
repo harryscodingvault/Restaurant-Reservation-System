@@ -28,8 +28,6 @@ const SearchReservation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  console.log(reservations);
-
   useEffect(() => {
     setError(api_error);
 

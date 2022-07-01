@@ -72,6 +72,11 @@ const ReservationCard = ({ reservation }) => {
             </div>
           </Link>
         )}
+        <Link to={`/reservations/${reservation_id}/edit`}>
+          <div className="btn">
+            <h5>Edit</h5>
+          </div>
+        </Link>
       </div>
     </Wrapper>
   );

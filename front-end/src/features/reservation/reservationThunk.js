@@ -9,6 +9,15 @@ export const addReservationThunk = async (url, reservation, thunkAPI) => {
   }
 };
 
+export const editReservationThunk = async (url, reservation, thunkAPI) => {
+  try {
+    const response = await originURL.put(url, { data: reservation });
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data);
+  }
+};
+
 export const getAllReservationThunk = async (url, thunkAPI) => {
   try {
     const response = await originURL.get(url);

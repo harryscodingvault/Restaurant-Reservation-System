@@ -7,6 +7,7 @@ import AddReservation from "./pages/addReservation/AddReservation";
 import AddTable from "./pages/addTable/AddTable";
 import SelectTables from "./pages/selectTable/SelectTables";
 import SearchReservation from "./pages/searchReservation/SearchReservation";
+import EditReservation from "./pages/editReservation/editReservation";
 
 /**
  * Defines the root application component.
@@ -22,6 +23,7 @@ function App() {
         <Route path="reservations" exact>
           <Route path="new" element={<AddReservation />} />
           <Route path=":reservationId/seat" element={<SelectTables />} />
+          <Route path=":reservationId/edit" element={<EditReservation />} />
         </Route>
         <Route path="tables" exact>
           <Route path="new" element={<AddTable />} />
