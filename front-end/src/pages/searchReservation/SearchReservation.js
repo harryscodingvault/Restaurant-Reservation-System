@@ -6,7 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import ErrorAlert from "../../layout/ErrorAlert.js";
-import { getAllReservations } from "../../features/reservation/reservationSlice";
+import {
+  getAllReservations,
+  setSearchPhone,
+} from "../../features/reservation/reservationSlice";
 import ReservationList from "../../layout/ReservationList";
 
 const initialValues = {
@@ -29,7 +32,11 @@ const SearchReservation = () => {
 
   useEffect(() => {
     setError(api_error);
-  }, [api_error]);
+
+    if (reservations?.length <= 0 && search_phone) {
+      setError("No reservations found ");
+    }
+  }, [api_error, reservations, search_phone]);
 
   useEffect(() => {
     setReservations(reservation_list);
@@ -52,7 +59,7 @@ const SearchReservation = () => {
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(values);
+
     if (name === "mobile_number") {
       const phoneNumber = formatPhoneNumber(value);
       setValues({ ...values, mobile_number: phoneNumber });
@@ -68,6 +75,7 @@ const SearchReservation = () => {
       setError("Fill all required fields!");
     } else {
       dispatch(getAllReservations({ search_phone: mobile_number }));
+      dispatch(setSearchPhone(mobile_number));
       setReservationsError(null);
     }
   };
@@ -80,7 +88,7 @@ const SearchReservation = () => {
         <FormRow
           type="tel"
           name="mobile_number"
-          placeholder="Mobile Number"
+          placeholder="Enter a customer's phone number"
           value={values.mobile_number}
           handleChange={handleChange}
         ></FormRow>
@@ -89,7 +97,7 @@ const SearchReservation = () => {
           <div className="spinner"></div>
         ) : (
           <button className="btn btn-blok" type="submit">
-            <h5>Submit</h5>
+            <h5>Find</h5>
           </button>
         )}
         <button

@@ -101,6 +101,9 @@ const reservationSlice = createSlice({
     setSearchDate: (state, { payload }) => {
       state.search_date = payload;
     },
+    setSearchPhone: (state, { payload }) => {
+      state.search_phone = payload;
+    },
   },
   extraReducers: {
     // ADD RESERVATION
@@ -205,5 +208,5 @@ const reservationSlice = createSlice({
   },
 });
 
-export const { setSearchDate } = reservationSlice.actions;
+export const { setSearchDate, setSearchPhone } = reservationSlice.actions;
 export default reservationSlice.reducer;
