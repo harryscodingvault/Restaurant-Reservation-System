@@ -37,7 +37,7 @@ function Dashboard() {
     };
 
     loadDashboard(search_date || today());
-  }, [search_date, dispatch]);
+  }, [search_date, dispatch, reservation_list]);
 
   const getPrev = () => {
     let prevDate = previous(search_date || today());

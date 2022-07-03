@@ -16,7 +16,7 @@ const reservationExists = async (req, res, next) => {
 };
 
 const checkDate = (date, time) => {
-  const inputDate = new Date(`${date} ${time}`);
+  const inputDate = new Date(`${date} ${time} 00`);
 
   const currentDate = new Date();
 
@@ -29,12 +29,14 @@ const checkDate = (date, time) => {
   if (inputDate.getDay() === 2) {
     return "Closed on Tuesday";
   }
+
   if (
     inputDate.toDateString() === currentDate.toDateString() &&
     formatTime > time
   ) {
-    return "It has to be current time";
+    return "It has to be future time";
   }
+
   if (currentDate > inputDate) {
     return "It has to be a future date";
   }
