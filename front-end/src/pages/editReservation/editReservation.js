@@ -16,14 +16,14 @@ import {
 const EditReservation = () => {
   const { api_error, isLoading, current_reservation, reservation_list } =
     useSelector((store) => store.reservation);
-  const [reservation, setReservation] = useState(null);
+
   const [values, setValues] = useState({
-    first_name: current_reservation?.first_name || "",
-    last_name: reservation?.last_name || "",
-    mobile_number: reservation?.mobile_number || "",
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
     reservation_date: "",
-    reservation_time: reservation?.reservation_time || "",
-    people: reservation?.people || "",
+    reservation_time: "",
+    people: "",
   });
   const [error, setError] = useState(api_error);
   const [submit, setSubmit] = useState(false);
@@ -32,8 +32,7 @@ const EditReservation = () => {
 
   const { reservationId } = useParams();
 
-  console.log(reservation);
-  //formatAsDate(current_reservation?.reservation_date)
+  console.log(current_reservation?.reservation_date);
 
   useEffect(() => {
     setError(api_error);
@@ -41,7 +40,19 @@ const EditReservation = () => {
 
   useEffect(() => {
     dispatch(setCurrentReservation(reservationId));
-    setReservation(current_reservation);
+
+    const reservationDate = formatAsDate(
+      current_reservation?.reservation_date || "0000-00-00T00:00:00.000Z"
+    );
+
+    setValues({
+      first_name: current_reservation?.first_name || "",
+      last_name: current_reservation?.last_name || "",
+      mobile_number: current_reservation?.mobile_number || "",
+      reservation_date: reservationDate || "",
+      reservation_time: current_reservation?.reservation_time || "",
+      people: current_reservation?.people || "",
+    });
   }, [dispatch, reservationId, current_reservation]);
 
   useEffect(() => {
