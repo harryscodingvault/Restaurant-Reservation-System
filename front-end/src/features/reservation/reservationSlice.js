@@ -33,7 +33,7 @@ export const editReservation = createAsyncThunk(
   async (reservation, thunkAPI) => {
     const { reservation_id } = reservation;
     return editReservationThunk(
-      `/reservations/${reservation_id}/status`,
+      `/reservations/${reservation_id}`,
       reservation,
       thunkAPI
     );

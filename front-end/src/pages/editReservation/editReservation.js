@@ -32,8 +32,6 @@ const EditReservation = () => {
 
   const { reservationId } = useParams();
 
-  console.log(current_reservation?.reservation_date);
-
   useEffect(() => {
     setError(api_error);
   }, [api_error]);
@@ -112,7 +110,7 @@ const EditReservation = () => {
     ) {
       setError("Fill all required fields!");
     } else {
-      // dispatch(editReservation(values));
+      dispatch(editReservation({ ...values, reservation_id: reservationId }));
       setSubmit(true);
     }
   };
