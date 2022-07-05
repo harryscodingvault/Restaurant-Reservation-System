@@ -1,7 +1,7 @@
 const knex = require("../db/connection.js");
 
 const list = () => {
-  return knex("tables").select("*").orderBy("name", "asc");
+  return knex("tables").select("*").orderBy("table_name", "asc");
 };
 
 const getTable = (table_id) => {

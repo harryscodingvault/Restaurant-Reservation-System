@@ -21,6 +21,10 @@ const tableExists = async (req, res, next) => {
 const reservationExists = async (req, res, next) => {
   const { reservation_id } = req.body.data;
 
+  if (reservation_id === null || reservation_id === undefined) {
+    return res.status(400).json({ message: "reservation_id is missing" });
+  }
+
   const reservation = await reservationsService.getReservation({
     reservation_id,
   });
@@ -30,7 +34,7 @@ const reservationExists = async (req, res, next) => {
     return next();
   }
 
-  next({ status: 400, message: `Reservation cannot be found.` });
+  next({ status: 404, message: `Reservation cannot be found.` });
 };
 
 // CONTROLLERS
@@ -47,10 +51,7 @@ async function create(req, res) {
   const { table_name, capacity } = data;
 
   if (capacity >= 1) {
-    const reservation = await service.create({
-      name: table_name,
-      capacity: capacity,
-    });
+    const reservation = await service.create(data);
     return res.json({
       data: reservation,
     });
@@ -70,7 +71,11 @@ async function update(req, res) {
   }
   if (capacity >= people) {
     const data = await service.update({ table_id, reservation_id });
-    return res.json({
+    const status = await reservationsService.updateStatus({
+      reservation_id,
+      status: "seated",
+    });
+    return res.status(200).json({
       data: data,
     });
   }
@@ -86,6 +91,10 @@ async function deleteTable(req, res) {
   }
   if (table_id) {
     const data = await service.update({ table_id, reservation_id: null });
+    const status = await reservationsService.updateStatus({
+      reservation_id: table.reservation_id,
+      status: "finished",
+    });
     return res.json({
       data: data,
     });
