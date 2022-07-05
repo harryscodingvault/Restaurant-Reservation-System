@@ -44,10 +44,13 @@ async function list(req, res) {
 
 async function create(req, res) {
   const data = req.body.data;
-  const { names, capacity } = data;
+  const { table_name, capacity } = data;
 
   if (capacity >= 1) {
-    const reservation = await service.create(data);
+    const reservation = await service.create({
+      name: table_name,
+      capacity: capacity,
+    });
     return res.json({
       data: reservation,
     });
@@ -93,7 +96,7 @@ async function deleteTable(req, res) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
-    asyncErrorBoundary(hasProperties("name", "capacity")),
+    asyncErrorBoundary(hasProperties("table_name", "capacity")),
     asyncErrorBoundary(create),
   ],
   update: [

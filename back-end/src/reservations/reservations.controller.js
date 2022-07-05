@@ -50,6 +50,17 @@ const isDate = (date) => {
   return new Date(date) !== "Invalid Date" && !isNaN(new Date(date));
 };
 
+const isTime = (time) => {
+  regexp_1 = /^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$/;
+  regexp_2 = /^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$/;
+
+  if (regexp_1.test(time) || regexp_2.test(time)) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 // CONTROLLERS
 const service = require("./reservation.service");
 
@@ -83,14 +94,20 @@ async function getReservation(req, res) {
 async function create(req, res) {
   const data = req.body.data;
 
-  const { reservation_date, reservation_time, status } = data;
+  const { reservation_date, reservation_time, status, people } = data;
 
   if (status && status !== "booked") {
     return res.status(400).json({ error: `status can not be ${status}` });
   }
 
+  if (isNaN(people)) {
+    return res.status(400).json({ error: "people is not a number" });
+  }
   if (!isDate(reservation_date)) {
     return res.status(400).json({ error: "reservation_date is not a date" });
+  }
+  if (!isTime(reservation_time)) {
+    return res.status(400).json({ error: "reservation_time is not a time" });
   }
 
   if (checkDate(reservation_date, reservation_time) === true) {
@@ -119,7 +136,7 @@ async function updateStatus(req, res) {
   }
 
   if (status === "unknown") {
-    return res.status(400).json({ message: "status can not be unknown" });
+    return res.status(400).json({ error: "status can not be unknown" });
   }
 
   if (reservation_id) {

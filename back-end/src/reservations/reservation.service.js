@@ -5,9 +5,9 @@ const list = (date) => {
     return knex("reservations")
       .select("*")
       .where({ reservation_date: date })
-      .orderBy("created_at", "desc");
+      .orderBy("reservation_time", "asc");
   }
-  return knex("reservations").select("*").orderBy("created_at", "desc");
+  return knex("reservations").select("*").orderBy("reservation_time", "asc");
 };
 
 const getReservation = ({ reservation_id, mobile_number }) => {
@@ -17,6 +17,7 @@ const getReservation = ({ reservation_id, mobile_number }) => {
         "translate(mobile_number, '() -', '') like ?",
         `%${mobile_number.replace(/\D/g, "")}%`
       )
+      .whereNotIn({ status: "finished" })
       .orderBy("reservation_date");
   }
   return knex("reservations")
