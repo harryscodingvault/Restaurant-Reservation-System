@@ -13,7 +13,7 @@ const reservationExists = async (req, res, next) => {
   }
 
   next({
-    status: 404,
+    status: 400,
     message: `Reservation ${reservation_id} cannot be found.`,
   });
 };
@@ -82,7 +82,7 @@ async function list(req, res) {
 async function getReservation(req, res) {
   const reservation = res.locals.reservation;
 
-  res.json({
+  return res.status(200).json({
     data: reservation,
   });
 }

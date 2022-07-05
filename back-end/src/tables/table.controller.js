@@ -19,13 +19,15 @@ const tableExists = async (req, res, next) => {
 };
 
 const reservationExists = async (req, res, next) => {
-  if (!req.body.data) {
+  const { data } = req.body;
+
+  if (!data) {
     return res.status(400).json({ error: "data is missing" });
   }
-  const { reservation_id } = req.body.data;
+  const { reservation_id } = data;
 
   if (!reservation_id) {
-    return res.status(400).json({ error: "reservation_id is missing" });
+    return res.status(400).json({ error: `reservation_id  is missing` });
   }
 
   const reservation = await reservationsService.getReservation({
@@ -47,7 +49,7 @@ const reservationExists = async (req, res, next) => {
 
 async function list(req, res) {
   const data = await service.list();
-  res.json({
+  return res.status(200).json({
     data: data,
   });
 }
@@ -57,9 +59,9 @@ async function create(req, res) {
   const { table_name, capacity } = data;
 
   if (table_name.length === 1) {
-    return res.status(400).json({ error: `table name cant be ${table_name}` });
+    return res.status(400).json({ error: `table_name cant be ${table_name}` });
   }
-  if (isNaN(capacity)) {
+  if (typeof capacity === "string") {
     return res
       .status(400)
       .json({ error: `capacity ${capacity} has to be a number` });

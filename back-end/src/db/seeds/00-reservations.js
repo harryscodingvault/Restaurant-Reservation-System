@@ -1,6 +1,6 @@
 exports.seed = async function (knex) {
   // Deletes ALL existing entries
-  await knex("reservations").del();
+  await knex.raw("TRUNCATE TABLE reservations RESTART IDENTITY CASCADE");
   await knex("reservations").insert([
     {
       first_name: "Rick",
