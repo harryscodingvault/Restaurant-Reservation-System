@@ -84,7 +84,7 @@ async function update(req, res) {
   const { reservation_id, people } = reservation;
 
   if (table.reservation_id !== null) {
-    return res.status(200).json({ message: "table is already occupied" });
+    return res.status(400).json({ error: "table is already occupied" });
   }
   if (capacity >= people) {
     const data = await service.update({ table_id, reservation_id });
@@ -96,7 +96,7 @@ async function update(req, res) {
       data: data,
     });
   }
-  return res.status(400).json({ message: "reservation is over capacity" });
+  return res.status(400).json({ error: "reservation is over capacity" });
 }
 
 async function deleteTable(req, res) {
