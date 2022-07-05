@@ -16,7 +16,7 @@ const reservationExists = async (req, res, next) => {
 };
 
 const checkDate = (date, time) => {
-  const inputDate = new Date(`${date} ${time} 00`);
+  const inputDate = new Date(`${date} ${time}`);
 
   const currentDate = new Date();
 
@@ -27,7 +27,7 @@ const checkDate = (date, time) => {
   }
 
   if (inputDate.getDay() === 2) {
-    return "Closed on Tuesday";
+    return "closed on Tuesday";
   }
 
   if (
@@ -43,6 +43,10 @@ const checkDate = (date, time) => {
   return true;
 };
 
+const isDate = (date) => {
+  return new Date(date) !== "Invalid Date" && !isNaN(new Date(date));
+};
+
 // CONTROLLERS
 const service = require("./reservation.service");
 
@@ -55,7 +59,7 @@ async function list(req, res) {
         data: data,
       });
     } catch (err) {
-      res.status(400).json({ message: "No reservations found" });
+      res.status(400).json({ error: "No reservations found" });
     }
   }
 
@@ -78,6 +82,10 @@ async function create(req, res) {
 
   const { reservation_date, reservation_time } = data;
 
+  if (!isDate(reservation_date)) {
+    res.status(400).json({ error: "reservation_date is not a date" });
+  }
+
   if (checkDate(reservation_date, reservation_time) === true) {
     const reservation = await service.create(data);
     return res.json({
@@ -86,7 +94,7 @@ async function create(req, res) {
   }
   res
     .status(400)
-    .json({ message: checkDate(reservation_date, reservation_time) });
+    .json({ error: checkDate(reservation_date, reservation_time) });
 }
 
 async function updateStatus(req, res) {
@@ -108,15 +116,18 @@ async function updateReservation(req, res) {
   const data = req.body.data;
 
   const reservation = res.locals.reservation;
-  const { reservation_id } = reservation;
+  const { reservation_id, reservation_date } = reservation;
 
+  if (!isDate(reservation_date)) {
+    res.status(400).json({ error: "reservation_date is not a date" });
+  }
   if (reservation_id) {
     const info = await service.updateReservation({ reservation_id, data });
     return res.json({
       data: info,
     });
   }
-  res.status(400).json({ message: "problems updating status" });
+  res.status(400).json({ error: "problems updating status" });
 }
 
 module.exports = {
@@ -144,7 +155,6 @@ module.exports = {
     asyncErrorBoundary(updateStatus),
   ],
   updateReservation: [
-    asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(
       hasProperties(
         "first_name",
@@ -155,6 +165,8 @@ module.exports = {
         "people"
       )
     ),
+    asyncErrorBoundary(reservationExists),
+
     asyncErrorBoundary(updateReservation),
   ],
 };

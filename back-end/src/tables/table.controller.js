@@ -15,7 +15,7 @@ const tableExists = async (req, res, next) => {
     return next();
   }
 
-  next({ status: 400, message: `Table cannot be found.` });
+  next({ status: 404, message: `Table ${table_id} cannot be found.` });
 };
 
 const reservationExists = async (req, res, next) => {
@@ -63,7 +63,7 @@ async function update(req, res) {
   const { reservation_id, people } = reservation;
 
   if (table.reservation_id !== null) {
-    return res.status(400).json({ message: "table is already occupied" });
+    return res.status(200).json({ message: "table is already occupied" });
   }
   if (capacity >= people) {
     const data = await service.update({ table_id, reservation_id });
@@ -79,7 +79,7 @@ async function deleteTable(req, res) {
 
   const { table_id } = table;
   if (table.reservation_id === null) {
-    return res.status(400).json({ message: "table is already free" });
+    return res.status(400).json({ message: "not occupied" });
   }
   if (table_id) {
     const data = await service.update({ table_id, reservation_id: null });
@@ -87,7 +87,7 @@ async function deleteTable(req, res) {
       data: data,
     });
   }
-  return res.status(400).json({ message: "Can not free this table" });
+  return res.status(200).json({ message: "Can not free this table" });
 }
 
 module.exports = {
