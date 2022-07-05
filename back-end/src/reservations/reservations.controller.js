@@ -12,7 +12,10 @@ const reservationExists = async (req, res, next) => {
     return next();
   }
 
-  next({ status: 400, message: `Reservation cannot be found.` });
+  next({
+    status: 404,
+    message: `Reservation ${reservation_id} cannot be found.`,
+  });
 };
 
 const checkDate = (date, time) => {
@@ -80,19 +83,23 @@ async function getReservation(req, res) {
 async function create(req, res) {
   const data = req.body.data;
 
-  const { reservation_date, reservation_time } = data;
+  const { reservation_date, reservation_time, status } = data;
+
+  if (status && status !== "booked") {
+    return res.status(400).json({ error: `status can not be ${status}` });
+  }
 
   if (!isDate(reservation_date)) {
-    res.status(400).json({ error: "reservation_date is not a date" });
+    return res.status(400).json({ error: "reservation_date is not a date" });
   }
 
   if (checkDate(reservation_date, reservation_time) === true) {
     const reservation = await service.create(data);
-    return res.json({
+    return res.status(201).json({
       data: reservation,
     });
   }
-  res
+  return res
     .status(400)
     .json({ error: checkDate(reservation_date, reservation_time) });
 }
@@ -103,13 +110,25 @@ async function updateStatus(req, res) {
   const { reservation_id } = reservation;
   console.log(status);
 
+  if (reservation.status === status) {
+    return res.status(400).json({ message: "same status" });
+  }
+
+  if (reservation.status === "finished") {
+    return res.status(400).json({ message: "status already finished" });
+  }
+
+  if (status === "unknown") {
+    return res.status(400).json({ message: "status can not be unknown" });
+  }
+
   if (reservation_id) {
     const data = await service.updateStatus({ reservation_id, status });
-    return res.json({
-      data: data,
+    return res.status(200).json({
+      data: { status: status },
     });
   }
-  res.status(400).json({ message: "problems updating status" });
+  return res.status(400).json({ message: "problems updating status" });
 }
 
 async function updateReservation(req, res) {

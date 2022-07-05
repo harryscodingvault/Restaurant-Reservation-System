@@ -5,9 +5,9 @@ const list = (date) => {
     return knex("reservations")
       .select("*")
       .where({ reservation_date: date })
-      .orderBy("reservation_date", "asc");
+      .orderBy("created_at", "desc");
   }
-  return knex("reservations").select("*").orderBy("reservation_date", "asc");
+  return knex("reservations").select("*").orderBy("created_at", "desc");
 };
 
 const getReservation = ({ reservation_id, mobile_number }) => {
