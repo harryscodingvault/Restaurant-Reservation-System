@@ -104,7 +104,7 @@ async function deleteTable(req, res) {
 
   const { table_id } = table;
   if (table.reservation_id === null) {
-    return res.status(400).json({ message: "not occupied" });
+    return res.status(400).json({ error: "not occupied" });
   }
   if (table_id) {
     const data = await service.update({ table_id, reservation_id: null });
