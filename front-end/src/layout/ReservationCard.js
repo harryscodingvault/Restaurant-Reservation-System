@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Wrapper from "./ReservationCard.style";
 
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { changeReservationStatus } from "../features/reservation/reservationSlice";
 
 const ReservationCard = ({ reservation }) => {
   const {
@@ -14,6 +16,8 @@ const ReservationCard = ({ reservation }) => {
     reservation_time,
     status,
   } = reservation;
+  const dispatch = useDispatch();
+  const [submit, setSubmit] = useState(false);
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString();
@@ -25,6 +29,20 @@ const ReservationCard = ({ reservation }) => {
     let min = str[1];
     let timeOfDay = hour >= 12 ? "AM" : "PM";
     return `${hour}:${min} ${timeOfDay}`;
+  };
+
+  const cancelReservationHandler = () => {
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      const reservationStatus = {
+        reservationId: reservation_id,
+        status: "cancelled",
+      };
+      dispatch(changeReservationStatus(reservationStatus));
+    }
   };
 
   return (
@@ -66,17 +84,26 @@ const ReservationCard = ({ reservation }) => {
       </div>
       <div className="reservation-btn-group">
         {status === "booked" && (
-          <Link to={`/reservations/${reservation_id}/seat`}>
-            <div className="btn">
-              <h5>Seat</h5>
+          <>
+            <Link to={`/reservations/${reservation_id}/seat`}>
+              <div className="btn">
+                <h5>Seat</h5>
+              </div>
+            </Link>
+            <Link to={`/reservations/${reservation_id}/edit`}>
+              <div className="btn">
+                <h5>Edit</h5>
+              </div>
+            </Link>
+
+            <div
+              className={`btn data-reservation-id-cancel=${reservation_id}`}
+              onClick={() => cancelReservationHandler()}
+            >
+              <h5>Cancel</h5>
             </div>
-          </Link>
+          </>
         )}
-        <Link to={`/reservations/${reservation_id}/edit`}>
-          <div className="btn">
-            <h5>Edit</h5>
-          </div>
-        </Link>
       </div>
     </Wrapper>
   );
