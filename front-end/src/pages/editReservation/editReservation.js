@@ -11,6 +11,7 @@ import ErrorAlert from "../../layout/ErrorAlert.js";
 import {
   editReservation,
   setCurrentReservation,
+  changeReservationStatus,
 } from "../../features/reservation/reservationSlice";
 
 const EditReservation = () => {
@@ -115,6 +116,21 @@ const EditReservation = () => {
     }
   };
 
+  const cancelReservationHandler = () => {
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      const reservationStatus = {
+        reservationId: reservationId,
+        status: "cancelled",
+      };
+      dispatch(changeReservationStatus(reservationStatus));
+      setSubmit(true);
+    }
+  };
+
   return (
     <Wrapper>
       <form className="form" onSubmit={onSubmit}>
@@ -176,9 +192,9 @@ const EditReservation = () => {
           </button>
         )}
         <button
-          className="btn btn-blok"
+          className={`btn btn-blok data-reservation-id-cancel=${reservationId}`}
           type="button"
-          onClick={() => navigate("/")}
+          onClick={() => cancelReservationHandler()}
         >
           <h5>Cancel</h5>
         </button>
