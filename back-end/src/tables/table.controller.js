@@ -19,10 +19,13 @@ const tableExists = async (req, res, next) => {
 };
 
 const reservationExists = async (req, res, next) => {
+  if (!req.body.data) {
+    return res.status(400).json({ error: "data is missing" });
+  }
   const { reservation_id } = req.body.data;
 
-  if (reservation_id === null || reservation_id === undefined) {
-    return res.status(400).json({ message: "reservation_id is missing" });
+  if (!reservation_id) {
+    return res.status(400).json({ error: "reservation_id is missing" });
   }
 
   const reservation = await reservationsService.getReservation({
@@ -34,7 +37,10 @@ const reservationExists = async (req, res, next) => {
     return next();
   }
 
-  next({ status: 404, message: `Reservation cannot be found.` });
+  next({
+    status: 404,
+    message: `Reservation ${reservation_id} cannot be found.`,
+  });
 };
 
 // CONTROLLERS
@@ -50,13 +56,22 @@ async function create(req, res) {
   const data = req.body.data;
   const { table_name, capacity } = data;
 
+  if (table_name.length === 1) {
+    return res.status(400).json({ error: `table name cant be ${table_name}` });
+  }
+  if (isNaN(capacity)) {
+    return res
+      .status(400)
+      .json({ error: `capacity ${capacity} has to be a number` });
+  }
+
   if (capacity >= 1) {
     const reservation = await service.create(data);
-    return res.json({
+    return res.status(201).json({
       data: reservation,
     });
   }
-  res.status(400).json({ message: "capacity has to be al least 1" });
+  return res.status(400).json({ message: "capacity has to be al least 1" });
 }
 
 async function update(req, res) {
@@ -111,7 +126,6 @@ module.exports = {
   update: [
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(tableExists),
-    asyncErrorBoundary(hasProperties("reservation_id")),
     asyncErrorBoundary(update),
   ],
   deleteTable: [

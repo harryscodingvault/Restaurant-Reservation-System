@@ -67,14 +67,10 @@ const service = require("./reservation.service");
 async function list(req, res) {
   const { date, mobile_number } = req.query;
   if (mobile_number) {
-    try {
-      const data = await service.getReservation({ mobile_number });
-      return res.json({
-        data: data,
-      });
-    } catch (err) {
-      res.status(400).json({ error: "No reservations found" });
-    }
+    const data = await service.getReservation({ mobile_number });
+    return res.json({
+      data: data,
+    });
   }
 
   const data = await service.list(date);
@@ -100,8 +96,8 @@ async function create(req, res) {
     return res.status(400).json({ error: `status can not be ${status}` });
   }
 
-  if (isNaN(people)) {
-    return res.status(400).json({ error: "people is not a number" });
+  if (typeof people === "string") {
+    return res.status(400).json({ error: `people ${people} is not a number ` });
   }
   if (!isDate(reservation_date)) {
     return res.status(400).json({ error: "reservation_date is not a date" });
@@ -156,6 +152,9 @@ async function updateReservation(req, res) {
 
   if (!isDate(reservation_date)) {
     res.status(400).json({ error: "reservation_date is not a date" });
+  }
+  if (!isTime(reservation_time)) {
+    return res.status(400).json({ error: "reservation_time is not a time" });
   }
   if (reservation_id) {
     const info = await service.updateReservation({ reservation_id, data });
