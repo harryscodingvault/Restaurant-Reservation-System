@@ -122,7 +122,6 @@ async function updateStatus(req, res) {
   const { status } = req.body.data;
   const reservation = res.locals.reservation;
   const { reservation_id } = reservation;
-  console.log(status);
 
   if (reservation.status === "finished") {
     return res.status(400).json({ error: "status already finished" });
@@ -143,12 +142,15 @@ async function updateStatus(req, res) {
 
 async function updateReservation(req, res) {
   const data = req.body.data;
-
+  const { reservation_date, reservation_time, people } = data;
   const reservation = res.locals.reservation;
-  const { reservation_id, reservation_date } = reservation;
+  const { reservation_id } = reservation;
 
+  if (typeof people === "string") {
+    return res.status(400).json({ error: `people ${people} is not a number ` });
+  }
   if (!isDate(reservation_date)) {
-    res.status(400).json({ error: "reservation_date is not a date" });
+    return res.status(400).json({ error: "reservation_date is not a date" });
   }
   if (!isTime(reservation_time)) {
     return res.status(400).json({ error: "reservation_time is not a time" });
@@ -156,7 +158,7 @@ async function updateReservation(req, res) {
   if (reservation_id) {
     const info = await service.updateReservation({ reservation_id, data });
     return res.json({
-      data: info,
+      data: info[0],
     });
   }
   res.status(400).json({ error: "problems updating status" });
