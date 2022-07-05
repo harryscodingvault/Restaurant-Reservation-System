@@ -81,7 +81,11 @@ async function update(req, res) {
 
   const reservation = res.locals.reservation;
   const { capacity, table_id } = table;
-  const { reservation_id, people } = reservation;
+  const { reservation_id, people, status } = reservation;
+
+  if (status === "seated") {
+    return res.status(400).json({ error: "reservation is already 'seated" });
+  }
 
   if (table.reservation_id !== null) {
     return res.status(400).json({ error: "table is already occupied" });

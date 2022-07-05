@@ -13,7 +13,7 @@ const reservationExists = async (req, res, next) => {
   }
 
   next({
-    status: 400,
+    status: 404,
     message: `Reservation ${reservation_id} cannot be found.`,
   });
 };
@@ -67,9 +67,10 @@ const service = require("./reservation.service");
 async function list(req, res) {
   const { date, mobile_number } = req.query;
   if (mobile_number) {
-    const data = await service.getReservation({ mobile_number });
+    const reservations = await service.getReservation({ mobile_number });
+
     return res.json({
-      data: data,
+      data: reservations,
     });
   }
 
@@ -123,12 +124,8 @@ async function updateStatus(req, res) {
   const { reservation_id } = reservation;
   console.log(status);
 
-  if (reservation.status === status) {
-    return res.status(400).json({ message: "same status" });
-  }
-
   if (reservation.status === "finished") {
-    return res.status(400).json({ message: "status already finished" });
+    return res.status(400).json({ error: "status already finished" });
   }
 
   if (status === "unknown") {
@@ -136,7 +133,7 @@ async function updateStatus(req, res) {
   }
 
   if (reservation_id) {
-    const data = await service.updateStatus({ reservation_id, status });
+    const this_status = await service.updateStatus({ reservation_id, status });
     return res.status(200).json({
       data: { status: status },
     });
