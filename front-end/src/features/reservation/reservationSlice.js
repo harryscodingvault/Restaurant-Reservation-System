@@ -138,7 +138,7 @@ const reservationSlice = createSlice({
     },
     [addReservation.rejected]: (state, { payload }) => {
       state.isLoading = false;
-      state.api_error = payload.message;
+      state.api_error = payload.error;
     },
     // EDIT RESERVATION
     [editReservation.pending]: (state) => {

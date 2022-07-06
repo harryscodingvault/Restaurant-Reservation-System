@@ -3,13 +3,6 @@ import Menu from "./Menu";
 
 import { Outlet } from "react-router-dom";
 
-/**
- * Defines the main layout of the application.
- *
- * You will not need to make changes to this file.
- *
- * @returns {JSX.Element}
- */
 function Layout() {
   return (
     <div className="layout-container">

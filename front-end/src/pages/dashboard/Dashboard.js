@@ -6,6 +6,7 @@ import ReservationList from "../../layout/ReservationList";
 import TableList from "../../layout/TableList";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   getAllReservations,
   setSearchDate,
@@ -21,6 +22,7 @@ function Dashboard() {
   const [showTables, setShowTables] = useState(false);
   const [reservations, setReservations] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadDashboard = (date) => {
@@ -42,11 +44,13 @@ function Dashboard() {
   const getPrev = () => {
     let prevDate = previous(search_date || today());
     dispatch(setSearchDate(prevDate));
+    navigate(`/dashboard?date=${prevDate}`);
   };
 
   const getNext = () => {
     let nextDate = next(search_date || today());
     dispatch(setSearchDate(nextDate));
+    navigate(`/dashboard?date=${nextDate}`);
   };
 
   return (

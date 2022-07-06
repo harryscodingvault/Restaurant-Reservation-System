@@ -12,19 +12,17 @@ const FormRow = ({
   pattern,
 }) => {
   return (
-    <div className="form-row">
-      <input
-        className="form-input"
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={handleChange}
-        min={min}
-        max={max}
-        pattern={pattern}
-      ></input>
-    </div>
+    <input
+      className="form-input form-row"
+      type={type}
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      onChange={handleChange}
+      min={min}
+      max={max}
+      pattern={pattern}
+    ></input>
   );
 };
 

@@ -42,11 +42,11 @@ const AddReservation = () => {
   useEffect(() => {
     if (current_reservation && submit) {
       setSearchDate();
-      navigate("/dashboard");
-      setSubmit(false);
       const { reservation_date } = values;
       let date = reservation_date.split("/").join("-");
       dispatch(setSearchDate(date));
+      navigate(`/dashboard?date=${reservation_date}`);
+      setSubmit(false);
     }
   }, [submit, current_reservation, navigate, dispatch, values]);
 
@@ -154,19 +154,18 @@ const AddReservation = () => {
           min="1"
         ></FormRow>
 
-        {isLoading ? (
-          <div className="spinner"></div>
-        ) : (
-          <button className="btn btn-blok" type="submit">
-            <h5>Submit</h5>
-          </button>
-        )}
+        {isLoading && <div className="spinner"></div>}
+
+        <button className="btn btn-blok" type="submit">
+          Submit
+        </button>
+
         <button
           className="btn btn-blok"
           type="button"
-          onClick={() => navigate("/")}
+          onClick={() => navigate(-1)}
         >
-          <h5>Cancel</h5>
+          Cancel
         </button>
       </form>
     </Wrapper>
