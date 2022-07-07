@@ -5,52 +5,25 @@ import ErrorAlert from "../../layout/ErrorAlert";
 import ReservationList from "../../layout/ReservationList";
 import TableList from "../../layout/TableList";
 
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  getAllReservations,
-  setSearchDate,
-  getTables,
-} from "../../features/reservation/reservationSlice";
+
 import { today, previous, next } from "../../utils/date-time";
 
 function Dashboard() {
-  const { reservation_list, search_date, table_list } = useSelector(
-    (store) => store.reservation
-  );
   const [reservationsError, setReservationsError] = useState(null);
   const [showTables, setShowTables] = useState(false);
   const [reservations, setReservations] = useState(null);
-  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadDashboard = (date) => {
-      const abortController = new AbortController();
-      dispatch(getAllReservations({ search_date: date }));
-      dispatch(getTables());
-      setReservationsError(null);
-
-      const filteredReservations = reservation_list?.filter(
-        (reservation) => reservation.status !== "finished"
-      );
-      setReservations(filteredReservations);
-      return () => abortController.abort();
-    };
-
-    loadDashboard(search_date || today());
-  }, [search_date, dispatch, reservation_list]);
-
   const getPrev = () => {
-    let prevDate = previous(search_date || today());
-    dispatch(setSearchDate(prevDate));
-    navigate(`/dashboard?date=${prevDate}`);
+    // let prevDate = previous(search_date || today());
+    // navigate(`/dashboard?date=${prevDate}`);
   };
 
   const getNext = () => {
-    let nextDate = next(search_date || today());
-    dispatch(setSearchDate(nextDate));
-    navigate(`/dashboard?date=${nextDate}`);
+    //let nextDate = next(search_date || today());
+    //navigate(`/dashboard?date=${nextDate}`);
   };
 
   return (
@@ -63,15 +36,10 @@ function Dashboard() {
       {!showTables && (
         <>
           <div className="dashboard-current-date">
-            <h2>{search_date || today()}</h2>
+            <h2>{today()}</h2>
           </div>
           <div className="dashboard-button-group">
-            <div
-              className="btn"
-              onClick={() => dispatch(setSearchDate(today()))}
-            >
-              Today
-            </div>
+            <div className="btn">Today</div>
             <div className="btn" onClick={() => getPrev()}>
               Prev
             </div>
@@ -81,16 +49,6 @@ function Dashboard() {
           </div>
 
           <ReservationList reservations={reservations ? reservations : []} />
-          <ErrorAlert error={reservationsError} />
-        </>
-      )}
-      {showTables && (
-        <>
-          <div className="dashboard-current-date">
-            <h2>{search_date || today()}</h2>
-          </div>
-
-          <TableList tables={table_list ? table_list : []} />
           <ErrorAlert error={reservationsError} />
         </>
       )}

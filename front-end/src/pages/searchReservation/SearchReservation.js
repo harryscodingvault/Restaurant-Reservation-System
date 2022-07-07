@@ -3,13 +3,9 @@ import Wrapper from "./SearchReservation.style";
 
 import FormRow from "../../layout/FormRow.js";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 import ErrorAlert from "../../layout/ErrorAlert.js";
-import {
-  getAllReservations,
-  setSearchPhone,
-} from "../../features/reservation/reservationSlice";
+
 import ReservationList from "../../layout/ReservationList";
 
 const initialValues = {
@@ -17,28 +13,12 @@ const initialValues = {
 };
 
 const SearchReservation = () => {
-  const { api_error, isLoading, search_phone, reservation_list } = useSelector(
-    (store) => store.reservation
-  );
   const [values, setValues] = useState(initialValues);
-  const [error, setError] = useState(api_error);
+  const [error, setError] = useState("");
   const [reservations, setReservations] = useState(null);
   const [reservationsError, setReservationsError] = useState(null);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setError(api_error);
-
-    if (reservations?.length <= 0 && search_phone) {
-      setError("No reservations found ");
-    }
-  }, [api_error, reservations, search_phone]);
-
-  useEffect(() => {
-    setReservations(reservation_list);
-  }, [reservation_list, search_phone]);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;
@@ -72,8 +52,6 @@ const SearchReservation = () => {
     if (!mobile_number) {
       setError("Fill all required fields!");
     } else {
-      dispatch(getAllReservations({ search_phone: mobile_number }));
-      dispatch(setSearchPhone(mobile_number));
       setReservationsError(null);
     }
   };
@@ -91,13 +69,12 @@ const SearchReservation = () => {
           handleChange={handleChange}
         ></FormRow>
 
-        {isLoading ? (
-          <div className="spinner"></div>
-        ) : (
-          <button className="btn btn-blok" type="submit">
-            <h5>Find</h5>
-          </button>
-        )}
+        <div className="spinner"></div>
+
+        <button className="btn btn-blok" type="submit">
+          <h5>Find</h5>
+        </button>
+
         <button
           className="btn btn-blok"
           type="button"

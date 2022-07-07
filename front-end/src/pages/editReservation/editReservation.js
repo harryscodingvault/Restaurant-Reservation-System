@@ -2,21 +2,12 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./editReservation.style";
 
 import FormRow from "../../layout/FormRow.js";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { formatAsDate } from "../../utils/date-time";
 import ErrorAlert from "../../layout/ErrorAlert.js";
-import {
-  editReservation,
-  setCurrentReservation,
-} from "../../features/reservation/reservationSlice";
 
 const EditReservation = () => {
-  const { api_error, isLoading, current_reservation, reservation_list } =
-    useSelector((store) => store.reservation);
-
   const [values, setValues] = useState({
     first_name: "",
     last_name: "",
@@ -25,44 +16,11 @@ const EditReservation = () => {
     reservation_time: "",
     people: "",
   });
-  const [error, setError] = useState(api_error);
+  const [error, setError] = useState("");
   const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const { reservationId } = useParams();
-
-  useEffect(() => {
-    setError(api_error);
-  }, [api_error]);
-
-  useEffect(() => {
-    dispatch(setCurrentReservation(reservationId));
-
-    const reservationDate = formatAsDate(
-      current_reservation?.reservation_date || "0000-00-00T00:00:00.000Z"
-    );
-
-    setValues({
-      first_name: current_reservation?.first_name || "",
-      last_name: current_reservation?.last_name || "",
-      mobile_number: current_reservation?.mobile_number || "",
-      reservation_date: reservationDate || "",
-      reservation_time: current_reservation?.reservation_time || "",
-      people: current_reservation?.people || "",
-    });
-  }, [dispatch, reservationId, current_reservation]);
-
-  useEffect(() => {
-    if (
-      (current_reservation && submit) ||
-      reservation_list === null ||
-      reservation_list?.length <= 0
-    ) {
-      navigate("/dashboard");
-      setSubmit(false);
-    }
-  }, [submit, current_reservation, navigate, dispatch, reservation_list]);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;
@@ -110,7 +68,6 @@ const EditReservation = () => {
     ) {
       setError("Fill all required fields!");
     } else {
-      dispatch(editReservation({ ...values, reservation_id: reservationId }));
       setSubmit(true);
     }
   };
@@ -168,13 +125,12 @@ const EditReservation = () => {
           min="1"
         ></FormRow>
 
-        {isLoading ? (
-          <div className="spinner"></div>
-        ) : (
-          <button className="btn" type="submit">
-            <h5>Submit</h5>
-          </button>
-        )}
+        <div className="spinner"></div>
+
+        <button className="btn" type="submit">
+          <h5>Submit</h5>
+        </button>
+
         <button
           className="btn"
           type="button"

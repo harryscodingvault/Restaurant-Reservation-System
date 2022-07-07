@@ -3,10 +3,8 @@ import Wrapper from "./AddTable.style";
 
 import FormRow from "../../layout/FormRow.js";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 import ErrorAlert from "../../layout/ErrorAlert.js";
-import { addTable } from "../../features/reservation/reservationSlice";
 
 const initialValues = {
   name: "",
@@ -14,25 +12,10 @@ const initialValues = {
 };
 
 const AddTable = () => {
-  const { api_error, isLoading, current_table } = useSelector(
-    (store) => store.reservation
-  );
   const [values, setValues] = useState(initialValues);
-  const [error, setError] = useState(api_error);
+  const [error, setError] = useState("");
   const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setError(api_error);
-  }, [api_error]);
-
-  useEffect(() => {
-    if (submit && current_table) {
-      navigate("/dashboard");
-      setSubmit(false);
-    }
-  }, [submit, navigate, dispatch, values, current_table]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -47,7 +30,6 @@ const AddTable = () => {
     if (!capacity || !name) {
       setError("Fill all required fields!");
     } else {
-      dispatch(addTable(values));
       setSubmit(true);
     }
   };
@@ -74,13 +56,10 @@ const AddTable = () => {
           min="1"
         ></FormRow>
 
-        {isLoading ? (
-          <div className="spinner"></div>
-        ) : (
-          <button className="btn btn-blok" type="submit">
-            <h5>Submit</h5>
-          </button>
-        )}
+        <button className="btn btn-blok" type="submit">
+          <h5>Submit</h5>
+        </button>
+
         <button
           className="btn btn-blok"
           type="button"

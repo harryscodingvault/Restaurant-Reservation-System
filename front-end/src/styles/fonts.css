@@ -19,7 +19,7 @@ body {
   color:var(--textColor);
 }
 
-p {margin-bottom: 1.5rem; max-width: 40em;}
+p { max-width: 40em;}
 
 h1, h2, h3, h4, h5 {
   margin: 0;

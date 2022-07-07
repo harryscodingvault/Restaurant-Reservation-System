@@ -2,84 +2,24 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./SelectTables.style";
 
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 import ErrorAlert from "../../layout/ErrorAlert.js";
-import {
-  seatTable,
-  changeReservationStatus,
-  getAllReservations,
-} from "../../features/reservation/reservationSlice";
 
 const initialValues = {
   table: null,
 };
 
 const SelectTables = () => {
-  const {
-    api_error,
-    isLoading,
-    table_list,
-    reservation_list,
-    current_table,
-    current_reservation,
-    search_date,
-  } = useSelector((store) => store.reservation);
   const [values, setValues] = useState(initialValues);
-  const [error, setError] = useState(api_error);
+  const [error, setError] = useState("");
   const [submit, setSubmit] = useState(false);
   const [currentReservation, setCurrentReservation] = useState(null);
   const [tables, setTables] = useState([]);
   const [noTables, setNoTables] = useState(false);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   const { reservationId } = useParams();
-
-  useEffect(() => {
-    setError(api_error);
-    if (noTables === true) setError("No tables Available");
-  }, [api_error, noTables]);
-
-  useEffect(() => {
-    if (
-      tables === [] ||
-      table_list === null ||
-      (current_table && !error && submit && current_reservation)
-    ) {
-      dispatch(getAllReservations({ search_date: search_date }));
-      navigate("/dashboard");
-    }
-  }, [
-    tables,
-    navigate,
-    table_list,
-    currentReservation,
-    current_table,
-    error,
-    submit,
-    current_reservation,
-    dispatch,
-    search_date,
-  ]);
-
-  useEffect(() => {
-    const reservation = reservation_list?.find((reservation) => {
-      return reservation.reservation_id === Number(reservationId);
-    });
-    const filteredTables = table_list?.filter(
-      (table) =>
-        table.capacity >= currentReservation?.people &&
-        table.reservation_id === null
-    );
-    setTables(filteredTables);
-    setCurrentReservation(reservation);
-    if (filteredTables?.length) {
-      filteredTables[0]
-        ? setValues({ table: filteredTables[0]?.table_id })
-        : setNoTables(true);
-    }
-  }, [reservationId, reservation_list, table_list, currentReservation]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -99,8 +39,6 @@ const SelectTables = () => {
     if (!table) {
       setError("Select a table!");
     } else {
-      dispatch(seatTable(data));
-      dispatch(changeReservationStatus(reservationStatus));
       setSubmit(true);
     }
   };
@@ -131,13 +69,11 @@ const SelectTables = () => {
               </select>
             </div>
 
-            {isLoading ? (
-              <div className="spinner"></div>
-            ) : (
-              <button className="btn btn-blok" type="submit">
-                <h5>Submit</h5>
-              </button>
-            )}
+            <div className="spinner"></div>
+
+            <button className="btn btn-blok" type="submit">
+              <h5>Submit</h5>
+            </button>
           </>
         )}
         <button

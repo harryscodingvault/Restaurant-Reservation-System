@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./ReservationCard.style";
 
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { changeReservationStatus } from "../features/reservation/reservationSlice";
 
 const ReservationCard = ({ reservation }) => {
   const {
@@ -16,8 +14,6 @@ const ReservationCard = ({ reservation }) => {
     reservation_time,
     status,
   } = reservation;
-  const dispatch = useDispatch();
-  const [submit, setSubmit] = useState(false);
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString();
@@ -41,7 +37,6 @@ const ReservationCard = ({ reservation }) => {
         reservationId: reservation_id,
         status: "cancelled",
       };
-      dispatch(changeReservationStatus(reservationStatus));
     }
   };
 

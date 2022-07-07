@@ -13,7 +13,6 @@ import EditReservation from "./pages/editReservation/editReservation";
  * Defines the root application component.
  * @returns {JSX.Element}
  */
-
 function App() {
   return (
     <Routes>

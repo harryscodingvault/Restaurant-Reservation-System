@@ -56,36 +56,29 @@ ul{
 .btn {
     width: 130px;
     height: 40px;
-    font-size: 1.1em;
+    font-size: 1em;
     cursor: pointer;
     background-color: var(--red-dark);
     color: var(--grey-100);
-    border: 0;
+    border:  2px solid var(--grey-100);
+    border-radius: 0;
     font-family: inherit;
     transition:var(--transition);
-    box-shadow: 0 5px 3px -3px var(--red-light);
-    display: inline-block;
     text-transform: capitalize;
+   
+    
    }
 .btn h5{
     padding: 0;
     margin: 0;
 }
 .btn:hover {
-  
-    transform: translateY(-10px);
-    box-shadow: 0 7px 0 -2px var(--red-dark),
-     0 15px 0 -4px var(--red-light),
-     0 16px 10px -3px var(--red-light);
+    color: var(--grey-100);
+    background-color: var(--red-light);
 }
    
 .btn:active {
-    transition: all 0.2s;
-    transform: translateY(-5px);
-    box-shadow: 0 2px 0 -2px var(--blue-dark),
-     0 8px 0 -4px var(--blue-light),
-     0 12px 10px -3px var(--blue-light);
-    background-color:  var(--blue-dark);
+    background-color:var(--blue-dark);
 }
 
 .btn-block {

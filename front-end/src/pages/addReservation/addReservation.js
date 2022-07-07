@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./AddReservation.style";
 import FormRow from "../../layout/FormRow.js";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 import { today } from "../../utils/date-time.js";
 import ErrorAlert from "../../layout/ErrorAlert.js";
-import { addReservation } from "../../features/reservation/reservationSlice";
-import { setSearchDate } from "../../features/reservation/reservationSlice";
 
 const newDate = new Date();
 let currentTime = newDate
@@ -26,29 +23,10 @@ const initialValues = {
 };
 
 const AddReservation = () => {
-  const { api_error, isLoading, current_reservation } = useSelector(
-    (store) => store.reservation
-  );
   const [values, setValues] = useState(initialValues);
-  const [error, setError] = useState(api_error);
+  const [error, setError] = useState("");
   const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setError(api_error);
-  }, [api_error]);
-
-  useEffect(() => {
-    if (current_reservation && submit) {
-      setSearchDate();
-      const { reservation_date } = values;
-      let date = reservation_date.split("/").join("-");
-      dispatch(setSearchDate(date));
-      navigate(`/dashboard?date=${reservation_date}`);
-      setSubmit(false);
-    }
-  }, [submit, current_reservation, navigate, dispatch, values]);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;
@@ -96,7 +74,6 @@ const AddReservation = () => {
     ) {
       setError("Fill all required fields!");
     } else {
-      dispatch(addReservation(values));
       setSubmit(true);
     }
   };
@@ -153,8 +130,6 @@ const AddReservation = () => {
           handleChange={handleChange}
           min="1"
         ></FormRow>
-
-        {isLoading && <div className="spinner"></div>}
 
         <button className="btn btn-blok" type="submit">
           Submit

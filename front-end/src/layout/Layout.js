@@ -1,5 +1,6 @@
 import React from "react";
 import Menu from "./Menu";
+import Footer from "./Footer";
 
 import { Outlet } from "react-router-dom";
 
@@ -8,7 +9,7 @@ function Layout() {
     <div className="layout-container">
       <Menu />
       <Outlet />
-      <h3>Footer</h3>
+      <Footer />
     </div>
   );
 }
