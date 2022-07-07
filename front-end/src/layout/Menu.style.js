@@ -34,7 +34,10 @@ const Wrapper = styled.section`
       margin: 0.1rem;
       cursor: pointer;
       :hover {
-        background-color: var(--primary-400);
+        border-bottom: 0.1rem solid var(--primary-500);
+      }
+      a {
+        text-decoration: none;
       }
       @media screen and (min-width: 600px) {
         display: flex;

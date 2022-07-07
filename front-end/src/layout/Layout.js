@@ -2,15 +2,16 @@ import React from "react";
 import Menu from "./Menu";
 import Footer from "./Footer";
 
+import Wrapper from "./Layout.style";
 import { Outlet } from "react-router-dom";
 
 function Layout() {
   return (
-    <div className="layout-container">
+    <Wrapper>
       <Menu />
       <Outlet />
       <Footer />
-    </div>
+    </Wrapper>
   );
 }
 
