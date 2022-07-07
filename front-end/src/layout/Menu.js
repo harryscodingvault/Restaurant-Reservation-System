@@ -23,7 +23,7 @@ function Menu() {
           <NavLink
             to="/dashboard"
             style={({ isActive }) => {
-              return { color: isActive ? "red" : "white" };
+              return { color: isActive ? "var(--primary-500)" : "white" };
             }}
           >
             <span className="oi oi-dashboard" />
@@ -34,7 +34,7 @@ function Menu() {
           <NavLink
             to="/search"
             style={({ isActive }) => {
-              return { color: isActive ? "red" : "white" };
+              return { color: isActive ? "var(--primary-500)" : "white" };
             }}
           >
             <span className="oi oi-magnifying-glass" />
@@ -45,7 +45,7 @@ function Menu() {
           <NavLink
             to="/reservations/new"
             style={({ isActive }) => {
-              return { color: isActive ? "red" : "white" };
+              return { color: isActive ? "var(--primary-500)" : "white" };
             }}
           >
             <span className="oi oi-plus" />
@@ -56,7 +56,7 @@ function Menu() {
           <NavLink
             to="/tables/new"
             style={({ isActive }) => {
-              return { color: isActive ? "red" : "white" };
+              return { color: isActive ? "var(--primary-500)" : "white" };
             }}
           >
             <span className="oi oi-layers" />

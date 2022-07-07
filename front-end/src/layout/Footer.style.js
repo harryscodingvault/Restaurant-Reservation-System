@@ -9,7 +9,7 @@ const Wrapper = styled.section`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  width: var(--max-width);
+  max-width: var(--max-width);
   margin: 0 auto;
   p {
     font-family: inherit;
