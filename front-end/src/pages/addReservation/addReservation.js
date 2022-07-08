@@ -32,7 +32,6 @@ const AddReservation = () => {
   useEffect(() => {
     if (!error && reservation) {
       navigate(`/dashboard?date=${values.reservation_date}`);
-      console.log(reservation);
       setReservation(null);
     }
   }, [navigate, error, reservation, values]);

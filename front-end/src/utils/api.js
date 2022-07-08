@@ -13,11 +13,12 @@ export const addReservation = async (data) => {
   }
 };
 
-export const getAllReservations = async () => {
+export const getAllReservations = async (date) => {
   try {
-    const response = await originURL.get("/reservations");
+    const response = await originURL.get(`/reservations?date=${date}`);
     return response.data;
   } catch (error) {
-    throw error.response.data.error;
+    console.log(error.response.data);
+    throw error.response.data;
   }
 };

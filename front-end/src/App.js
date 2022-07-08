@@ -9,10 +9,6 @@ import SelectTables from "./pages/selectTable/SelectTables";
 import SearchReservation from "./pages/searchReservation/SearchReservation";
 import EditReservation from "./pages/editReservation/editReservation";
 
-/**
- * Defines the root application component.
- * @returns {JSX.Element}
- */
 function App() {
   return (
     <Routes>
