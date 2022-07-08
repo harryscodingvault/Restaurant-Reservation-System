@@ -1,5 +1,4 @@
 import React from "react";
-import Wrapper from "./FormRow.style.js";
 
 const FormRow = ({
   type,
@@ -13,7 +12,7 @@ const FormRow = ({
 }) => {
   return (
     <input
-      className="form-input form-row"
+      className="form-input"
       type={type}
       name={name}
       placeholder={placeholder}

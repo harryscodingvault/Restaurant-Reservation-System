@@ -3,19 +3,27 @@ import Wrapper from "./AddTable.style";
 
 import FormRow from "../../layout/FormRow.js";
 import { useNavigate } from "react-router-dom";
+import { addTable } from "../../utils/api";
 
 import ErrorAlert from "../../layout/ErrorAlert.js";
 
 const initialValues = {
-  name: "",
+  table_name: "",
   capacity: 1,
 };
 
 const AddTable = () => {
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState("");
-  const [submit, setSubmit] = useState(false);
+  const [table, setTable] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!error && table) {
+      navigate(`/dashboard`);
+      setTable(null);
+    }
+  }, [navigate, error, table, values]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -25,12 +33,13 @@ const AddTable = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { capacity, name } = values;
+    const { capacity, table_name } = values;
 
-    if (!capacity || !name) {
+    if (!capacity || !table_name) {
       setError("Fill all required fields!");
     } else {
-      setSubmit(true);
+      setError(null);
+      addTable(values).then(setTable).catch(setError);
     }
   };
 
@@ -41,9 +50,9 @@ const AddTable = () => {
         {error && <ErrorAlert error={{ message: error }} />}
         <FormRow
           type="text"
-          name="name"
+          name="table_name"
           placeholder="Table Name"
-          value={values.name}
+          value={values.table_name}
           handleChange={handleChange}
         ></FormRow>
 

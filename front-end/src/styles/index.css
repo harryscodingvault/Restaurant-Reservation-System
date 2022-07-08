@@ -133,7 +133,8 @@ ul{
     width: 95%;
 }
 .form-input, .form-textarea, .form-select {
-    width: 100%;
+    width: 95%;
+    margin-bottom: 0.5rem;
     height: 40px;
     line-height: 28px;
     padding: 0.375rem  0.375rem;

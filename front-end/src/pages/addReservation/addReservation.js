@@ -142,12 +142,12 @@ const AddReservation = () => {
           min="1"
         ></FormRow>
 
-        <button className="btn btn-blok" type="submit">
+        <button className="btn btn-block" type="submit">
           Submit
         </button>
 
         <button
-          className="btn btn-blok"
+          className="btn btn-block"
           type="button"
           onClick={() => navigate(-1)}
         >
