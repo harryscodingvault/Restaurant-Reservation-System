@@ -1,20 +1,13 @@
 import styled from "styled-components";
 
 const Wrapper = styled.section`
-  width: 100%;
+  width: 100vw;
+  max-width: var(--max-width);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  flex-wrap: wrap;
   border: 2px solid var(--primary-500);
-  margin-bottom: 0.5rem;
-  padding-top: 0.5rem;
-  .row {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
+
+  @media screen and (min-width: 600px) {
   }
 
   .text-group {
@@ -22,11 +15,15 @@ const Wrapper = styled.section`
     display: flex;
     flex-direction: row;
 
-    p {
-      padding-left: 0.5rem;
-    }
     .label {
       color: var(--primary-500);
+    }
+  }
+  .reservation-btn-group {
+    width: ;
+
+    .btn {
+      width: 33%;
     }
   }
 `;
