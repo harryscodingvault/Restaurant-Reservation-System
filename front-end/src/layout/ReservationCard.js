@@ -42,7 +42,7 @@ const ReservationCard = ({ reservation }) => {
 
   return (
     <Wrapper>
-      <div className="row">
+      <div className="info">
         <div className="text-group">
           <p className="label">Name: </p>
           <p>{first_name}</p> <p>{last_name}</p>
@@ -51,8 +51,15 @@ const ReservationCard = ({ reservation }) => {
           <p className="label">Phone: </p>
           <p>{mobile_number}</p>
         </div>
-      </div>
-      <div className="row">
+        <div className="text-group">
+          <p
+            className={`label data-reservation-id-status=${reservation.reservation_id}`}
+          >
+            Status:{" "}
+          </p>
+          <p>{status}</p>
+        </div>
+
         <div className="text-group">
           <p className="label">Date: </p>
           <p>{formatDate(reservation_date)}</p>
@@ -61,20 +68,10 @@ const ReservationCard = ({ reservation }) => {
           <p className="label">Time: </p>
           <p>{formatTime(reservation_time)}</p>
         </div>
-      </div>
-      <div className="row">
+
         <div className="text-group">
           <p className="label">Number of people: </p>
           <p>{people}</p>
-        </div>
-
-        <div className="text-group">
-          <p
-            className={`label data-reservation-id-status=${reservation.reservation_id}`}
-          >
-            Status:{" "}
-          </p>
-          <p>{status}</p>
         </div>
       </div>
       <div className="reservation-btn-group">

@@ -72,7 +72,7 @@ const AddTable = () => {
         <button
           className="btn btn-blok"
           type="button"
-          onClick={() => navigate("/")}
+          onClick={() => navigate(-1)}
         >
           <h5>Cancel</h5>
         </button>

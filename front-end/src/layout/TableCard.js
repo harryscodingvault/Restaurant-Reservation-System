@@ -5,7 +5,7 @@ import ErrorAlert from "./ErrorAlert";
 import { useNavigate } from "react-router-dom";
 
 const TableCard = ({ table }) => {
-  const { name, capacity, reservation_id } = table;
+  const { table_name, capacity, reservation_id } = table;
 
   const [error, setError] = useState("");
   const [submit, setSubmit] = useState(false);
@@ -32,7 +32,7 @@ const TableCard = ({ table }) => {
       <div className="row">
         <div className="text-group">
           <p className="label">Name: </p>
-          <p>{name}</p>
+          <p>{table_name}</p>
         </div>
         <div className="text-group">
           <p className="label">Capacity: </p>

@@ -6,24 +6,40 @@ const Wrapper = styled.section`
   display: flex;
   flex-wrap: wrap;
   border: 2px solid var(--primary-500);
+  padding: 0.5rem 0;
 
-  @media screen and (min-width: 600px) {
-  }
-
-  .text-group {
-    width: 50%;
+  .info {
+    width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
 
-    .label {
-      color: var(--primary-500);
+    @media screen and (min-width: 900px) {
+      width: 60%;
+    }
+    .text-group {
+      width: 50%;
+      display: flex;
+      flex-direction: row;
+      padding-left: 0.5rem;
+      @media screen and (min-width: 600px) {
+        padding-left: 1rem;
+        width: 30%;
+      }
+      .label {
+        color: var(--primary-500);
+      }
     }
   }
-  .reservation-btn-group {
-    width: ;
 
-    .btn {
-      width: 33%;
+  .reservation-btn-group {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (min-width: 900px) {
+      width: 40%;
     }
   }
 `;

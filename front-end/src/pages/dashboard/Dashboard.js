@@ -7,12 +7,12 @@ import TableList from "../../layout/TableList";
 
 import { useNavigate, useLocation } from "react-router-dom";
 
-import { getAllReservations } from "../../utils/api";
+import { getReservations, getTables } from "../../utils/api";
 import { today, previous, next } from "../../utils/date-time";
 
 function Dashboard() {
   const [error, setError] = useState(null);
-  const [showTables, setShowTables] = useState(false);
+  const [tables, setTables] = useState(null);
   const [reservations, setReservations] = useState(null);
   const navigate = useNavigate();
   const date = new URLSearchParams(useLocation().search).get("date");
@@ -22,11 +22,12 @@ function Dashboard() {
     const abortController = new AbortController();
     setError(null);
 
-    getAllReservations(currentDate)
+    getReservations(currentDate)
       .then((res) => setReservations(res.data))
       .catch(setError);
-
-    console.log(reservations);
+    getTables()
+      .then((res) => setTables(res.data))
+      .catch(setError);
 
     const filteredReservations = reservations?.filter(
       (reservation) => reservation.status !== "finished"
@@ -51,32 +52,25 @@ function Dashboard() {
 
   return (
     <Wrapper>
-      <div className="dashboard-switch">
-        <div className="btn" onClick={() => setShowTables(!showTables)}>
-          {showTables ? <h5>Reservations</h5> : <h5>Tables</h5>}
+      <div className="dashboard-current-date">
+        <h2>{currentDate}</h2>
+      </div>
+      <div className="dashboard-button-group">
+        <div className="btn">Today</div>
+        <div className="btn" onClick={() => getPrev()}>
+          Prev
+        </div>
+        <div className="btn" onClick={() => getNext()}>
+          Next
         </div>
       </div>
-      {!showTables && (
-        <>
-          <div className="dashboard-current-date">
-            <h2>{currentDate}</h2>
-          </div>
-          <div className="dashboard-button-group">
-            <div className="btn">Today</div>
-            <div className="btn" onClick={() => getPrev()}>
-              Prev
-            </div>
-            <div className="btn" onClick={() => getNext()}>
-              Next
-            </div>
-          </div>
 
-          <ReservationList
-            reservations={reservations?.length > 0 ? reservations : []}
-          />
-          <ErrorAlert error={error} />
-        </>
-      )}
+      <TableList tables={tables?.length > 0 ? tables : []} />
+      <ReservationList
+        reservations={reservations?.length > 0 ? reservations : []}
+      />
+
+      <ErrorAlert error={error} />
     </Wrapper>
   );
 }

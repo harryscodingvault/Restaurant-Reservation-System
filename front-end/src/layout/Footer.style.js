@@ -11,6 +11,7 @@ const Wrapper = styled.section`
   overflow: hidden;
   max-width: var(--max-width);
   margin: 0 auto;
+  margin-top: 1rem;
   p {
     font-family: inherit;
     margin: 0;

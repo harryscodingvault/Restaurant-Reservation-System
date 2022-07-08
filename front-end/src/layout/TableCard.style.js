@@ -5,7 +5,9 @@ const Wrapper = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 100vw;
+  max-width: 30rem;
+  border: 2px solid var(--primary-500);
   .row {
     display: flex;
     flex-direction: row;
@@ -17,6 +19,11 @@ const Wrapper = styled.section`
       flex-direction: row;
       align-items: center;
       width: 33%;
+      padding-left: 0.5rem;
+      p {
+        padding: 0;
+        margin: 0;
+      }
 
       .label {
         color: var(--primary-500);
