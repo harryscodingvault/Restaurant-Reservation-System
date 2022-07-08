@@ -63,7 +63,7 @@ ul{
     border:  2px solid var(--grey-100);
     border-radius: 0;
     font-family: inherit;
-    transition:var(--transition);
+ 
     text-transform: capitalize;
    
     

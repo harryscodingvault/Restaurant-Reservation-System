@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { today } from "../../utils/date-time.js";
 import ErrorAlert from "../../layout/ErrorAlert.js";
+import { addReservation } from "../../utils/api";
 
 const newDate = new Date();
 let currentTime = newDate
@@ -24,9 +25,17 @@ const initialValues = {
 
 const AddReservation = () => {
   const [values, setValues] = useState(initialValues);
-  const [error, setError] = useState("");
-  const [submit, setSubmit] = useState(false);
+  const [error, setError] = useState(null);
+  const [reservation, setReservation] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!error && reservation) {
+      navigate(`/dashboard?date=${values.reservation_date}`);
+      console.log(reservation);
+      setReservation(null);
+    }
+  }, [navigate, error, reservation, values]);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;
@@ -74,7 +83,10 @@ const AddReservation = () => {
     ) {
       setError("Fill all required fields!");
     } else {
-      setSubmit(true);
+      setError(null);
+      addReservation({ ...values, people: Number(people) })
+        .then(setReservation)
+        .catch(setError);
     }
   };
 
