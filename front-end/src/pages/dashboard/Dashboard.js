@@ -33,9 +33,7 @@ function Dashboard() {
           if (isMounted) {
             setReservations(
               res.data?.filter(
-                (reservation) =>
-                  reservation.status !== "finished" &&
-                  reservation.status !== "cancelled"
+                (reservation) => reservation.status !== "finished"
               )
             );
           }
