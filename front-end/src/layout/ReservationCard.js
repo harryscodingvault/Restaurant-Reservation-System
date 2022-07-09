@@ -58,9 +58,7 @@ const ReservationCard = ({ reservation, refreshHandler }) => {
         </div>
         <div className="text-group ">
           <p className="label">Status: </p>
-          <p className={`data-reservation-id-status=${reservation_id}`}>
-            {status}
-          </p>
+          <p data-reservation-id-status={reservation_id}>{status}</p>
         </div>
 
         <div className="text-group">
@@ -93,7 +91,8 @@ const ReservationCard = ({ reservation, refreshHandler }) => {
             </a>
 
             <div
-              className={`btn data-reservation-id-cancel=${reservation_id}`}
+              className="btn"
+              data-reservation-id-cancel={reservation_id}
               onClick={() => cancelReservationHandler()}
             >
               Cancel
