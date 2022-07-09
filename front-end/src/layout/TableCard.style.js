@@ -5,7 +5,7 @@ const Wrapper = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100vw;
+  width: 100%;
   max-width: 30rem;
   border: 2px solid var(--primary-500);
   .row {

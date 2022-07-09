@@ -5,21 +5,55 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import ErrorAlert from "../../layout/ErrorAlert.js";
 
+import { getTables, seatTable, getReservation } from "../../utils/api";
+
 const initialValues = {
   table: null,
 };
 
 const SelectTables = () => {
-  const [values, setValues] = useState(initialValues);
   const [error, setError] = useState("");
-  const [submit, setSubmit] = useState(false);
-  const [currentReservation, setCurrentReservation] = useState(null);
+  const [reservation, setReservation] = useState(null);
   const [tables, setTables] = useState([]);
+  const [values, setValues] = useState({
+    initialValues,
+  });
   const [noTables, setNoTables] = useState(false);
-
   const navigate = useNavigate();
-
   const { reservationId } = useParams();
+
+  useEffect(() => {
+    if (!error && reservation?.status === "seated") {
+      navigate(`/dashboard`);
+    }
+  }, [navigate, error, reservation, values]);
+
+  const loadTables = () => {
+    const abortController = new AbortController();
+    setError(null);
+
+    getReservation(reservationId)
+      .then((res) => setReservation(res.data))
+      .catch(setError);
+
+    getTables()
+      .then((res) => {
+        const filteredTables = res.data.filter(
+          (table) =>
+            table?.capacity >= reservation?.people &&
+            table?.reservation_id === null
+        );
+
+        setTables(filteredTables);
+        setValues({ table: filteredTables?.[0]?.table_id });
+      })
+
+      .catch(setError);
+
+    return () => abortController.abort();
+  };
+
+  useEffect(loadTables, [reservation?.people, reservationId]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -30,16 +64,15 @@ const SelectTables = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     const { table } = values;
-    const data = { table: table, reservation: reservationId };
-    const reservationStatus = {
-      reservationId: reservationId,
-      status: "seated",
-    };
+
+    const data = { tableId: table, reservationId };
 
     if (!table) {
       setError("Select a table!");
     } else {
-      setSubmit(true);
+      setError(null);
+
+      seatTable(data).then(setReservation).catch(setError);
     }
   };
 
@@ -59,17 +92,15 @@ const SelectTables = () => {
                 className="form-select"
               >
                 {tables.map((table, index) => {
-                  const { name, capacity } = table;
+                  const { table_name, capacity } = table;
                   return (
                     <option key={index} value={capacity}>
-                      {name} - {capacity}
+                      {table_name} - {capacity}
                     </option>
                   );
                 })}
               </select>
             </div>
-
-            <div className="spinner"></div>
 
             <button className="btn btn-blok" type="submit">
               <h5>Submit</h5>
@@ -79,7 +110,7 @@ const SelectTables = () => {
         <button
           className="btn btn-blok"
           type="button"
-          onClick={() => navigate("/")}
+          onClick={() => navigate(-1)}
         >
           <h5>Cancel</h5>
         </button>

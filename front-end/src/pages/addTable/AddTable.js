@@ -23,7 +23,7 @@ const AddTable = () => {
       navigate(`/dashboard`);
       setTable(null);
     }
-  }, [navigate, error, table, values]);
+  }, [navigate, error, table]);
 
   const handleChange = (e) => {
     const name = e.target.name;

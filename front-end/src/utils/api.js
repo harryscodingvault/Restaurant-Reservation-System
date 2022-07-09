@@ -22,6 +22,15 @@ export const getReservations = async (date) => {
   }
 };
 
+export const getReservation = async (reservationId) => {
+  try {
+    const response = await originURL.get(`/reservations/${reservationId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export const addTable = async (table) => {
   try {
     const response = await originURL.post("/tables", { data: table });
@@ -34,6 +43,18 @@ export const addTable = async (table) => {
 export const getTables = async () => {
   try {
     const response = await originURL.get("/tables");
+    return response.data;
+  } catch (error) {
+    throw error.response.data.error;
+  }
+};
+
+export const seatTable = async (data) => {
+  const { tableId, reservationId } = data;
+  try {
+    const response = await originURL.put(`/tables/${tableId}/seat`, {
+      data: { reservation_id: reservationId },
+    });
     return response.data;
   } catch (error) {
     throw error.response.data.error;
