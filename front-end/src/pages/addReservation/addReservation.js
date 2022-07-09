@@ -130,8 +130,6 @@ const AddReservation = () => {
           placeholder="Reservation Time"
           value={values.reservation_time}
           handleChange={handleChange}
-          min="22:30"
-          max="21:30"
         ></FormRow>
         <FormRow
           type="number"
