@@ -51,6 +51,19 @@ export const editReservation = async (reservation) => {
   }
 };
 
+export const changeReservationStatus = async (data) => {
+  const { reservationId, status } = data;
+  try {
+    const response = await originURL.put(
+      `/reservations/${reservationId}/status`,
+      { data: { status: status } }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response.data.error;
+  }
+};
+
 export const addTable = async (table) => {
   try {
     const response = await originURL.post("/tables", { data: table });

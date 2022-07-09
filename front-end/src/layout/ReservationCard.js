@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./ReservationCard.style";
 
 import { Link } from "react-router-dom";
+import { changeReservationStatus } from "../utils/api";
+import ErrorAlert from "./ErrorAlert";
 
-const ReservationCard = ({ reservation }) => {
+const ReservationCard = ({ reservation, refreshHandler }) => {
   const {
     reservation_id,
     first_name,
@@ -14,7 +16,7 @@ const ReservationCard = ({ reservation }) => {
     reservation_time,
     status,
   } = reservation;
-
+  const [error, setError] = useState(null);
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString();
   };
@@ -37,11 +39,15 @@ const ReservationCard = ({ reservation }) => {
         reservationId: reservation_id,
         status: "cancelled",
       };
+      changeReservationStatus(reservationStatus)
+        .then(refreshHandler(true))
+        .catch(setError);
     }
   };
 
   return (
     <Wrapper>
+      {error && <ErrorAlert error={{ message: error }} />}
       <div className="info">
         <div className="text-group">
           <p className="label">Name: </p>

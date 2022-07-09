@@ -27,6 +27,9 @@ const Wrapper = styled.section`
       width: 90%;
     }
   }
+  h2 {
+    margin: 0 auto;
+  }
 `;
 
 export default Wrapper;

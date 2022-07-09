@@ -24,16 +24,20 @@ function Dashboard() {
     setError(null);
 
     getReservations({ date: currentDate })
-      .then((res) => setReservations(res.data))
+      .then((res) =>
+        setReservations(
+          res.data?.filter(
+            (reservation) =>
+              reservation.status !== "finished" &&
+              reservation.status !== "cancelled"
+          )
+        )
+      )
       .catch(setError);
     getTables()
       .then((res) => setTables(res.data))
       .catch(setError);
 
-    const filteredReservations = reservations?.filter(
-      (reservation) => reservation.status !== "finished"
-    );
-    setReservations(filteredReservations);
     setRefresh(false);
     return () => abortController.abort();
   };
@@ -72,13 +76,15 @@ function Dashboard() {
           Next
         </div>
       </div>
-
+      {tables?.length === 0 && <h2>No tables</h2>}
       <TableList
         tables={tables?.length > 0 ? tables : []}
         refreshHandler={(state) => refreshHandler(state)}
       />
+      {reservations?.length === 0 && <h2>No Reservations</h2>}
       <ReservationList
         reservations={reservations?.length > 0 ? reservations : []}
+        refreshHandler={(state) => refreshHandler(state)}
       />
 
       <ErrorAlert error={error} />

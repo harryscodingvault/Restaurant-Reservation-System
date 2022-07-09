@@ -48,7 +48,6 @@ const SearchReservation = () => {
     e.preventDefault();
     const { mobile_number } = values;
 
-    console.log("search_phone", mobile_number);
     if (!mobile_number) {
       setError("Fill all required fields!");
     } else {
