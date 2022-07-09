@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Wrapper from "./TableCard.style";
 
 import ErrorAlert from "./ErrorAlert";
-import { useNavigate } from "react-router-dom";
+import { freeTable } from "../utils/api";
 
-const TableCard = ({ table }) => {
-  const { table_name, capacity, reservation_id } = table;
+const TableCard = ({ table, refreshHandler }) => {
+  const { table_name, capacity, reservation_id, table_id } = table;
 
   const [error, setError] = useState("");
-  const [submit, setSubmit] = useState(false);
-
-  const navigate = useNavigate();
+  const [reservationId, setReservationId] = useState(reservation_id);
 
   const finishHandler = () => {
     const reservationStatus = {
@@ -23,7 +21,10 @@ const TableCard = ({ table }) => {
         "Is this table ready to seat new guests?\n\nThis cannot be undone."
       )
     ) {
-      setSubmit(true);
+      freeTable(table_id)
+        .then((res) => setReservationId(res.data.reservation_id))
+        .catch(setError);
+      refreshHandler(true);
     }
   };
 
@@ -40,14 +41,14 @@ const TableCard = ({ table }) => {
         </div>
         <div className="text-group">
           <p className="label">Status: </p>
-          {reservation_id ? (
+          {reservationId ? (
             <p className={`data-table-id-status=${table.table_id}`}>Occupied</p>
           ) : (
             <p className={`data-table-id-status=${table.table_id}`}>Free</p>
           )}
         </div>
       </div>
-      {reservation_id && (
+      {reservationId && (
         <>
           {error && <ErrorAlert error={{ message: error }} />}
           <div

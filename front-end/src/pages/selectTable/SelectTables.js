@@ -26,31 +26,39 @@ const SelectTables = () => {
     if (!error && reservation?.status === "seated") {
       navigate(`/dashboard`);
     }
-  }, [navigate, error, reservation, values]);
+  }, [navigate, error, reservation]);
 
   const loadTables = () => {
+    let isMounted = true;
     const abortController = new AbortController();
     setError(null);
 
     getReservation(reservationId)
-      .then((res) => setReservation(res.data))
+      .then((res) => {
+        if (isMounted) {
+          setReservation(res.data);
+        }
+      })
       .catch(setError);
 
     getTables()
       .then((res) => {
-        const filteredTables = res.data.filter(
-          (table) =>
-            table?.capacity >= reservation?.people &&
-            table?.reservation_id === null
-        );
-
-        setTables(filteredTables);
-        setValues({ table: filteredTables?.[0]?.table_id });
+        if (isMounted) {
+          const filteredTables = res.data.filter(
+            (table) =>
+              table?.capacity >= reservation?.people &&
+              table?.reservation_id === null
+          );
+          setTables(filteredTables);
+          setValues({ table: filteredTables?.[0]?.table_id });
+        }
       })
-
       .catch(setError);
 
-    return () => abortController.abort();
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   };
 
   useEffect(loadTables, [reservation?.people, reservationId]);
@@ -71,7 +79,6 @@ const SelectTables = () => {
       setError("Select a table!");
     } else {
       setError(null);
-
       seatTable(data).then(setReservation).catch(setError);
     }
   };

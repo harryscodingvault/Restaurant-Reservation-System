@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ErrorAlert from "../../layout/ErrorAlert.js";
 
 import ReservationList from "../../layout/ReservationList";
+import { getReservations } from "../../utils/api";
 
 const initialValues = {
   mobile_number: "",
@@ -16,7 +17,6 @@ const SearchReservation = () => {
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState("");
   const [reservations, setReservations] = useState(null);
-  const [reservationsError, setReservationsError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -52,7 +52,15 @@ const SearchReservation = () => {
     if (!mobile_number) {
       setError("Fill all required fields!");
     } else {
-      setReservationsError(null);
+      setError(null);
+      getReservations({ phone: mobile_number })
+        .then((res) => {
+          setReservations(res.data);
+          if (res.data?.length === 0) {
+            setError("No reservation found");
+          }
+        })
+        .catch(setError);
     }
   };
 
@@ -69,8 +77,6 @@ const SearchReservation = () => {
           handleChange={handleChange}
         ></FormRow>
 
-        <div className="spinner"></div>
-
         <button className="btn btn-blok" type="submit">
           <h5>Find</h5>
         </button>
@@ -78,13 +84,12 @@ const SearchReservation = () => {
         <button
           className="btn btn-blok"
           type="button"
-          onClick={() => navigate("/")}
+          onClick={() => navigate(-1)}
         >
           <h5>Cancel</h5>
         </button>
       </form>
       <ReservationList reservations={reservations ? reservations : []} />
-      <ErrorAlert error={reservationsError} />
     </Wrapper>
   );
 };

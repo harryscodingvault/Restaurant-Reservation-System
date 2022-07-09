@@ -17,12 +17,14 @@ function Dashboard() {
   const navigate = useNavigate();
   const date = new URLSearchParams(useLocation().search).get("date");
   const [currentDate, setCurrentDate] = useState(date || today());
+  const [refresh, setRefresh] = useState(false);
+  console.log("refresh", refresh);
 
   const loadDashboard = () => {
     const abortController = new AbortController();
     setError(null);
 
-    getReservations(currentDate)
+    getReservations({ date: currentDate })
       .then((res) => setReservations(res.data))
       .catch(setError);
     getTables()
@@ -33,10 +35,11 @@ function Dashboard() {
       (reservation) => reservation.status !== "finished"
     );
     setReservations(filteredReservations);
+    setRefresh(false);
     return () => abortController.abort();
   };
 
-  useEffect(loadDashboard, [currentDate]);
+  useEffect(loadDashboard, [currentDate, refresh]);
 
   const getPrev = () => {
     let prevDate = previous(currentDate || today());
@@ -50,13 +53,19 @@ function Dashboard() {
     navigate(`/dashboard?date=${nextDate}`);
   };
 
+  const refreshHandler = (state) => {
+    setRefresh(state);
+  };
+
   return (
     <Wrapper>
       <div className="dashboard-current-date">
         <h2>{currentDate}</h2>
       </div>
       <div className="dashboard-button-group">
-        <div className="btn">Today</div>
+        <div className="btn" onClick={() => setCurrentDate(today())}>
+          Today
+        </div>
         <div className="btn" onClick={() => getPrev()}>
           Prev
         </div>
@@ -65,7 +74,10 @@ function Dashboard() {
         </div>
       </div>
 
-      <TableList tables={tables?.length > 0 ? tables : []} />
+      <TableList
+        tables={tables?.length > 0 ? tables : []}
+        refreshHandler={(state) => refreshHandler(state)}
+      />
       <ReservationList
         reservations={reservations?.length > 0 ? reservations : []}
       />
