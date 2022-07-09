@@ -15,7 +15,10 @@ function Dashboard() {
   const [tables, setTables] = useState(null);
   const [reservations, setReservations] = useState(null);
   const navigate = useNavigate();
-  const date = new URLSearchParams(useLocation().search).get("date");
+  let date = new URLSearchParams(useLocation().search).get("date");
+  if (date === "undefined") {
+    date = today();
+  }
   const [currentDate, setCurrentDate] = useState(date || today());
   const [refresh, setRefresh] = useState(false);
 

@@ -8,7 +8,7 @@ import ErrorAlert from "../../layout/ErrorAlert.js";
 import { getTables, seatTable, getReservation } from "../../utils/api";
 
 const initialValues = {
-  table: null,
+  table_id: null,
 };
 
 const SelectTables = () => {
@@ -24,7 +24,7 @@ const SelectTables = () => {
 
   useEffect(() => {
     if (!error && reservation?.status === "seated") {
-      navigate(`/dashboard`);
+      navigate("/dashboard");
     }
   }, [navigate, error, reservation]);
 
@@ -44,13 +44,13 @@ const SelectTables = () => {
     getTables()
       .then((res) => {
         if (isMounted) {
-          const filteredTables = res.data.filter(
+          /* const filteredTables = res.data.filter(
             (table) =>
               table?.capacity >= reservation?.people &&
               table?.reservation_id === null
-          );
-          setTables(filteredTables);
-          setValues({ table: filteredTables?.[0]?.table_id });
+          );*/
+          setTables(res.data);
+          setValues({ table_id: res.data?.[0]?.table_id });
         }
       })
       .catch(setError);
@@ -71,11 +71,11 @@ const SelectTables = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { table } = values;
+    const { table_id } = values;
+    console.log(values);
+    const data = { tableId: table_id, reservationId };
 
-    const data = { tableId: table, reservationId };
-
-    if (!table) {
+    if (!table_id) {
       setError("Select a table!");
     } else {
       setError(null);
@@ -92,16 +92,16 @@ const SelectTables = () => {
           <>
             <div className="form-row form-row-select">
               <select
-                name="table"
-                id="table"
+                name="table_id"
+                id="table_id"
                 values={values.table}
                 onChange={handleChange}
                 className="form-select"
               >
                 {tables.map((table, index) => {
-                  const { table_name, capacity } = table;
+                  const { table_name, capacity, table_id } = table;
                   return (
-                    <option key={index} value={capacity}>
+                    <option key={index} value={table_id}>
                       {table_name} - {capacity}
                     </option>
                   );
@@ -117,7 +117,7 @@ const SelectTables = () => {
         <button
           className="btn btn-blok"
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate(`/dashboard?date=${values.reservation_date}`)}
         >
           <h5>Cancel</h5>
         </button>

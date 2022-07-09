@@ -57,13 +57,13 @@ const ReservationCard = ({ reservation, refreshHandler }) => {
           <p className="label">Phone: </p>
           <p>{mobile_number}</p>
         </div>
-        <div className="text-group">
+        <div className="text-group ">
+          <p className="label">Status: </p>
           <p
-            className={`label data-reservation-id-status=${reservation.reservation_id}`}
+            className={`data-reservation-id-status=${reservation.reservation_id}`}
           >
-            Status:{" "}
+            {status}
           </p>
-          <p>{status}</p>
         </div>
 
         <div className="text-group">
@@ -83,22 +83,23 @@ const ReservationCard = ({ reservation, refreshHandler }) => {
       <div className="reservation-btn-group">
         {status === "booked" && (
           <>
-            <Link to={`/reservations/${reservation_id}/seat`}>
-              <div className="btn">
-                <h5>Seat</h5>
+            <a href={`/reservations/${reservation_id}/seat`}>
+              <div
+                className="btn"
+                href={`/reservations/${reservation_id}/seat`}
+              >
+                Seat
               </div>
-            </Link>
-            <Link to={`/reservations/${reservation_id}/edit`}>
-              <div className="btn">
-                <h5>Edit</h5>
-              </div>
-            </Link>
+            </a>
+            <a href={`/reservations/${reservation_id}/edit`}>
+              <div className="btn">Edit</div>
+            </a>
 
             <div
               className={`btn data-reservation-id-cancel=${reservation_id}`}
               onClick={() => cancelReservationHandler()}
             >
-              <h5>Cancel</h5>
+              Cancel
             </div>
           </>
         )}

@@ -42,9 +42,9 @@ const TableCard = ({ table, refreshHandler }) => {
         <div className="text-group">
           <p className="label">Status: </p>
           {reservationId ? (
-            <p className={`data-table-id-status=${table.table_id}`}>Occupied</p>
+            <p className={`data-table-id-status=${table_id}`}>occupied</p>
           ) : (
-            <p className={`data-table-id-status=${table.table_id}`}>Free</p>
+            <p className={`data-table-id-status=${table_id}`}>free</p>
           )}
         </div>
       </div>

@@ -9,7 +9,7 @@ import ErrorAlert from "../../layout/ErrorAlert.js";
 
 const initialValues = {
   table_name: "",
-  capacity: 1,
+  capacity: 0,
 };
 
 const AddTable = () => {
@@ -39,7 +39,9 @@ const AddTable = () => {
       setError("Fill all required fields!");
     } else {
       setError(null);
-      addTable(values).then(setTable).catch(setError);
+      addTable({ table_name, capacity: Number(capacity) })
+        .then(setTable)
+        .catch(setError);
     }
   };
 
@@ -62,11 +64,10 @@ const AddTable = () => {
           placeholder="Capacity"
           value={values.capacity}
           handleChange={handleChange}
-          min="1"
         ></FormRow>
 
         <button className="btn btn-blok" type="submit">
-          <h5>Submit</h5>
+          Submit
         </button>
 
         <button
@@ -74,7 +75,7 @@ const AddTable = () => {
           type="button"
           onClick={() => navigate(-1)}
         >
-          <h5>Cancel</h5>
+          Cancel
         </button>
       </form>
     </Wrapper>
