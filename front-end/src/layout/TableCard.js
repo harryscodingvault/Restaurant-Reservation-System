@@ -9,7 +9,6 @@ const TableCard = ({ table, refreshHandler }) => {
   const [submit, setSubmit] = useState(false);
   const [error, setError] = useState("");
   const [reservation, setReservation] = useState(null);
-  const [activateDialog, setActivateDialog] = useState(false);
 
   useEffect(() => {
     if (submit === true && reservation) {
