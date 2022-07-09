@@ -57,7 +57,7 @@ const SearchReservation = () => {
         .then((res) => {
           setReservations(res.data);
           if (res.data?.length === 0) {
-            setError("No reservation found");
+            setError("No reservations found");
           }
         })
         .catch(setError);

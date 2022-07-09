@@ -18,7 +18,6 @@ function Dashboard() {
   const date = new URLSearchParams(useLocation().search).get("date");
   const [currentDate, setCurrentDate] = useState(date || today());
   const [refresh, setRefresh] = useState(false);
-  console.log("refresh", refresh);
 
   const loadDashboard = () => {
     const abortController = new AbortController();

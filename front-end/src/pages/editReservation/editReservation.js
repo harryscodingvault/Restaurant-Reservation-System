@@ -6,8 +6,10 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { formatAsDate } from "../../utils/date-time";
 import ErrorAlert from "../../layout/ErrorAlert.js";
+import { editReservation, getReservation } from "../../utils/api";
 
 const EditReservation = () => {
+  const [reservation, setReservation] = useState(null);
   const [values, setValues] = useState({
     first_name: "",
     last_name: "",
@@ -17,10 +19,35 @@ const EditReservation = () => {
     people: "",
   });
   const [error, setError] = useState("");
-  const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
-
   const { reservationId } = useParams();
+
+  useEffect(() => {
+    if (!error && reservation) {
+      navigate(-1);
+      setReservation(null);
+    }
+  }, [navigate, error, reservation, values]);
+
+  const loadReservation = () => {
+    const abortController = new AbortController();
+    setError(null);
+
+    getReservation(reservationId)
+      .then((res) => {
+        setValues({
+          ...res.data,
+          reservation_date: formatAsDate(res.data.reservation_date),
+        });
+      })
+      .catch(setError);
+
+    return () => {
+      abortController.abort();
+    };
+  };
+
+  useEffect(loadReservation, [reservationId]);
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;
@@ -68,7 +95,8 @@ const EditReservation = () => {
     ) {
       setError("Fill all required fields!");
     } else {
-      setSubmit(true);
+      setError(null);
+      editReservation(values).then(setReservation).catch(setError);
     }
   };
 
@@ -125,17 +153,11 @@ const EditReservation = () => {
           min="1"
         ></FormRow>
 
-        <div className="spinner"></div>
-
         <button className="btn" type="submit">
           <h5>Submit</h5>
         </button>
 
-        <button
-          className="btn"
-          type="button"
-          onClick={() => navigate("/dashboard")}
-        >
+        <button className="btn" type="button" onClick={() => navigate(-1)}>
           <h5>Cancel</h5>
         </button>
       </form>
