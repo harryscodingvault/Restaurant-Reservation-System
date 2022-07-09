@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Wrapper from "./SearchReservation.style";
 
 import FormRow from "../../layout/FormRow.js";

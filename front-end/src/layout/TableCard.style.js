@@ -6,7 +6,7 @@ const Wrapper = styled.section`
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 30rem;
+  max-width: 50rem;
   border: 2px solid var(--primary-500);
   padding-bottom: 0.5rem;
   .row {

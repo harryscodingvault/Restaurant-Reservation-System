@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Wrapper from "./TableCard.style";
 
 import ErrorAlert from "./ErrorAlert";
@@ -6,25 +6,26 @@ import { freeTable } from "../utils/api";
 
 const TableCard = ({ table, refreshHandler }) => {
   const { table_name, capacity, reservation_id, table_id } = table;
-
+  const [submit, setSubmit] = useState(false);
   const [error, setError] = useState("");
-  const [reservationId, setReservationId] = useState(reservation_id);
+  const [reservation, setReservation] = useState(null);
+  const [activateDialog, setActivateDialog] = useState(false);
+
+  useEffect(() => {
+    if (submit === true && reservation) {
+      refreshHandler(true);
+      setSubmit(false);
+    }
+  }, [submit, refreshHandler, reservation]);
 
   const finishHandler = () => {
-    const reservationStatus = {
-      reservationId: table.reservation_id,
-      status: "finished",
-    };
-
     if (
       window.confirm(
-        "Is this table ready to seat new guests?\n\nThis cannot be undone."
+        "Is this table ready to seat new guests? This cannot be undone."
       )
     ) {
-      freeTable(table_id)
-        .then((res) => setReservationId(res.data.reservation_id))
-        .catch(setError);
-      refreshHandler(true);
+      freeTable(table_id).then(setReservation).catch(setError);
+      setSubmit(true);
     }
   };
 
@@ -41,22 +42,23 @@ const TableCard = ({ table, refreshHandler }) => {
         </div>
         <div className="text-group">
           <p className="label">Status: </p>
-          {reservationId ? (
-            <p className={`data-table-id-status=${table_id}`}>occupied</p>
-          ) : (
-            <p className={`data-table-id-status=${table_id}`}>free</p>
-          )}
+
+          <p data-table-id-status={table_id}>
+            {reservation_id ? "Occupied" : "Free"}
+          </p>
         </div>
       </div>
-      {reservationId && (
+
+      {reservation_id && (
         <>
           {error && <ErrorAlert error={{ message: error }} />}
-          <div
-            className={` btn data-table-id-finish=${table.table_id}`}
+          <button
+            className="btn"
             onClick={() => finishHandler()}
+            data-table-id-finish={table_id}
           >
             Finish
-          </div>
+          </button>
         </>
       )}
     </Wrapper>

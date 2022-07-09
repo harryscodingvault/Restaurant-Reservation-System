@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Wrapper from "./ReservationCard.style";
 
-import { Link } from "react-router-dom";
 import { changeReservationStatus } from "../utils/api";
 import ErrorAlert from "./ErrorAlert";
 
@@ -59,9 +58,7 @@ const ReservationCard = ({ reservation, refreshHandler }) => {
         </div>
         <div className="text-group ">
           <p className="label">Status: </p>
-          <p
-            className={`data-reservation-id-status=${reservation.reservation_id}`}
-          >
+          <p className={`data-reservation-id-status=${reservation_id}`}>
             {status}
           </p>
         </div>

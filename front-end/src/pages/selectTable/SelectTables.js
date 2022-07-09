@@ -18,7 +18,6 @@ const SelectTables = () => {
   const [values, setValues] = useState({
     initialValues,
   });
-  const [noTables, setNoTables] = useState(false);
   const navigate = useNavigate();
   const { reservationId } = useParams();
 
@@ -44,11 +43,6 @@ const SelectTables = () => {
     getTables()
       .then((res) => {
         if (isMounted) {
-          /* const filteredTables = res.data.filter(
-            (table) =>
-              table?.capacity >= reservation?.people &&
-              table?.reservation_id === null
-          );*/
           setTables(res.data);
           setValues({ table_id: res.data?.[0]?.table_id });
         }
@@ -88,32 +82,30 @@ const SelectTables = () => {
       <form className="form" onSubmit={onSubmit}>
         <h3>Select Table</h3>
         {error && <ErrorAlert error={{ message: error }} />}
-        {!noTables && (
-          <>
-            <div className="form-row form-row-select">
-              <select
-                name="table_id"
-                id="table_id"
-                values={values.table}
-                onChange={handleChange}
-                className="form-select"
-              >
-                {tables.map((table, index) => {
-                  const { table_name, capacity, table_id } = table;
-                  return (
-                    <option key={index} value={table_id}>
-                      {table_name} - {capacity}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
 
-            <button className="btn btn-blok" type="submit">
-              <h5>Submit</h5>
-            </button>
-          </>
-        )}
+        <div className="form-row form-row-select">
+          <select
+            name="table_id"
+            id="table_id"
+            values={values.table}
+            onChange={handleChange}
+            className="form-select"
+          >
+            {tables.map((table, index) => {
+              const { table_name, capacity, table_id } = table;
+              return (
+                <option key={index} value={table_id}>
+                  {table_name} - {capacity}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+
+        <button className="btn btn-blok" type="submit">
+          <h5>Submit</h5>
+        </button>
+
         <button
           className="btn btn-blok"
           type="button"

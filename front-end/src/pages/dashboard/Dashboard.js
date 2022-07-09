@@ -14,38 +14,47 @@ function Dashboard() {
   const [error, setError] = useState(null);
   const [tables, setTables] = useState(null);
   const [reservations, setReservations] = useState(null);
+  const [refresh, setRefresh] = useState(false);
   const navigate = useNavigate();
   let date = new URLSearchParams(useLocation().search).get("date");
   if (date === "undefined") {
     date = today();
   }
   const [currentDate, setCurrentDate] = useState(date || today());
-  const [refresh, setRefresh] = useState(false);
 
-  const loadDashboard = () => {
-    const abortController = new AbortController();
-    setError(null);
+  useEffect(() => {
+    const loadDashboard = () => {
+      let isMounted = true;
+      const abortController = new AbortController();
+      setError(null);
 
-    getReservations({ date: currentDate })
-      .then((res) =>
-        setReservations(
-          res.data?.filter(
-            (reservation) =>
-              reservation.status !== "finished" &&
-              reservation.status !== "cancelled"
-          )
-        )
-      )
-      .catch(setError);
-    getTables()
-      .then((res) => setTables(res.data))
-      .catch(setError);
+      getReservations({ date: currentDate })
+        .then((res) => {
+          if (isMounted) {
+            setReservations(
+              res.data?.filter(
+                (reservation) =>
+                  reservation.status !== "finished" &&
+                  reservation.status !== "cancelled"
+              )
+            );
+          }
+        })
+        .catch(setError);
 
+      getTables()
+        .then((res) => {
+          if (isMounted) {
+            setTables(res.data);
+          }
+        })
+        .catch(setError);
+
+      return () => abortController.abort();
+    };
+    loadDashboard();
     setRefresh(false);
-    return () => abortController.abort();
-  };
-
-  useEffect(loadDashboard, [currentDate, refresh]);
+  }, [currentDate, refresh]);
 
   const getPrev = () => {
     let prevDate = previous(currentDate || today());
@@ -60,7 +69,9 @@ function Dashboard() {
   };
 
   const refreshHandler = (state) => {
-    setRefresh(state);
+    if (state === true) {
+      setRefresh(true);
+    }
   };
 
   return (

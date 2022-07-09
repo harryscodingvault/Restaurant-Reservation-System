@@ -97,7 +97,8 @@ export const seatTable = async (data) => {
 export const freeTable = async (tableId) => {
   try {
     const response = await originURL.delete(`/tables/${tableId}/seat`);
-    return response.data;
+
+    return response.data.data[0];
   } catch (error) {
     throw error.response.data.error;
   }
