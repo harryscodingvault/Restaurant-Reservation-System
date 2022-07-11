@@ -1,6 +1,6 @@
 # Restaurant Reservation System
 
-Link: [restaurant-reservation-table](https://restaurant-reservation-tables.herokuapp.com/) 
+Link: [restaurant-reservation-system](https://restaurant-reservation-tables.herokuapp.com/) 
 
 Dashboard to accept, edit, and delete reservations, create and assign tables.
 
